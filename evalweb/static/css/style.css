@@ -1,0 +1,171 @@
+.carousel img {
+    margin: 0 auto;
+}
+
+.carousel-inner {
+    background-color: rgb(75, 55, 20);
+}
+
+.category {
+    text-align: center;
+    margin-top: 20px; /* Espaciado superior */
+}
+
+.category img {
+    max-width: 100%; /* Ajusta el tamaño máximo de la imagen */
+    height: auto; /* Ajusta la altura automáticamente */
+    margin-bottom: 20px; /* Espaciado inferior */
+}
+
+.cont-contact {
+    background-color: rgb(102, 73, 23);
+    padding: 0;
+}
+
+.dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: rgb(170, 210, 125);
+    min-width: 160px;
+    box-shadow: 0 8px 16px 0 rgb(75, 55, 20);
+    z-index: 1;
+}
+
+.dropdown-content option {
+    color: rgb(75, 55, 20);
+    padding: 12px 16px;
+    text-decoration: none;
+    display: block;
+}
+
+.dropdown:hover .dropdown-content {
+    display: block;
+}
+
+.footer {
+    background-color: rgb(75, 55, 20);
+    color: rgb(170, 210, 125);
+}
+
+/* Estilos para el recuadro de imagen y texto */
+.image-text-box {
+    border: 1px solid rgb(170, 210, 125);
+    color: rgb(170, 210, 125);
+    padding: 20px;
+    margin-top: 20px;
+    background-color: rgb(75, 55, 20);
+}
+
+.max-height-700 {
+    max-height: 700px; /* Puedes ajustar este valor según tus necesidades */
+}
+
+.navbar {
+    max-width: 100%;
+    /* Ajusta el ancho máximo */
+    margin: 0 auto;
+    /* Centra la barra de navegación */
+}
+
+.navbar-categories {
+    background-color: rgb(170, 210, 125);
+    /* Color de fondo */
+    border-top: 1px solid rgb(170, 210, 125);
+    /* Borde superior */
+    padding: 10px 0;
+    /* Espaciado interior */
+}
+
+.navbar-categories a {
+    color: rgb(75, 55, 20);
+    /* Color del texto */
+    padding: 0 10px;
+    /* Espaciado horizontal entre elementos */
+    text-decoration: none;
+    /* Quita el subrayado */
+}
+
+.navbar-header {
+    padding: 10px;
+}
+
+.navbar-taller {
+    background-color: rgb(75, 55, 20);
+    color: rgb(170, 210, 125);
+    border-color: rgb(75, 55, 20);
+    padding: 10px 0;
+    margin: 0;
+    position: fixed;
+    width: 100%;
+    top: 0;
+    left: 0;
+    z-index: 999;
+}
+
+.nav-link.dropdown-toggle {
+    color: rgb(170, 210, 125); /* Cambia el color del texto a blanco */
+}
+
+.overlay-text {
+    position: absolute;
+    top: -3%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 1;
+    font-weight: bold;
+    color: rgb(75, 55, 20);
+}
+
+p {
+    color: rgb(170, 210, 125);
+    font-style:normal;
+}
+
+/* Estilos para el contenedor scrollable */
+.scrollable-container {
+    max-height: 400px; /* Altura máxima del contenedor */
+    overflow-y: scroll; /* Habilita la barra de desplazamiento vertical */
+    overflow-x: hidden; /* Oculta la barra de desplazamiento horizontal */
+    background-color: rgb(75, 55, 20);
+    color: rgb(170, 210, 125);
+    border: 1px solid rgb(170, 210, 125); /* Borde del contenedor */
+    padding: 50px; /* Espaciado interior del contenedor */
+    margin-top: 20px; /* Espaciado superior */
+}
+
+.search-bar button {
+    padding: 8px 15px;
+    background-color: rgb(110, 185, 55);
+    color: rgb(255, 246, 216);
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.search-bar input[type="text"] {
+    padding: 8px;
+    border: none;
+    border-radius: 8px;
+    width: 500px
+}
+
+.separator {
+    height: 50px; /* Altura del espacio de separación */
+}
+
+.nav-link button {
+    padding: 8px 15px;
+    background-color: rgb(110, 185, 55);
+    color: rgb(255, 246, 216);
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.btn1 {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 50px; 
+    width: 150px;  
+}

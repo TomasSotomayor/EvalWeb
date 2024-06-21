@@ -49,3 +49,80 @@ $(document).ready(function(){
         // Aquí podrías enviar el formulario utilizando AJAX o cualquier otro método
     });
 });
+
+
+
+function crearnavbar(){
+    const navbarSuperior = `
+<nav class="navbar navbar-expand-lg navbar-taller">
+    <div class="container-fluid">
+        <div class="navbar-header">
+            <a class="navbar-brand" href="/">
+                <img src="../../static/img/logo/logo.png" style="max-width:100%;height:auto;" alt="Logo" width="100">
+            </a>
+        </div>
+        <div class="d-flex ml-auto align-items-center">
+            <div class="search-bar d-flex align-items-center mr-4">
+                <input type="text" placeholder="Buscar..." class="form-control">
+                <button type="submit" class="btn btn-primary ml-2">Buscar</button>
+            </div>
+            <!-- Menú de navegación y botones -->
+            <ul class="navbar-nav d-flex align-items-center">
+                <li class="nav-item">
+                    <a href="/registro/"
+                       class="btn"
+                       style="background-color: #70bc34; color: rgb(255, 246, 216); margin-right: 10px;">Regístrate</a>
+                </li>
+                <li class="nav-item dropdown">
+                    <a class="btn dropdown-toggle"
+                       style="background-color: #70bc34; color: rgb(255, 246, 216); margin-right: 10px;"
+                       id="loginDropdown" role="button" data-toggle="dropdown" aria-haspopup="true"
+                       aria-expanded="false">Iniciar Sesión</a>
+                    <div class="dropdown-menu dropdown-menu-right p-3" aria-labelledby="loginDropdown">
+                        <form class="form" method="post" action="#">
+                            <div class="form-group">
+                                <label for="username">Usuario</label>
+                                <input type="text" class="form-control" id="username"
+                                       placeholder="Usuario">
+                            </div>
+                            <div class="form-group">
+                                <label for="password">Contraseña</label>
+                                <input type="password" class="form-control" id="password"
+                                       placeholder="Contraseña">
+                            </div>
+                            <button type="submit" class="btn btn-primary">Iniciar Sesión</button>
+                        </form>
+                    </div>
+                </li>
+                <li class="nav-item">
+                    <a href="/"
+                       class="btn"
+                       style="background-color: #70bc34; color: rgb(255, 246, 216);">Volver Inicio</a>
+                </li>
+            </ul>
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item dropdown">
+                    <button class="btn btn-success ml-2"
+                            onclick="verCarrito()"
+                            style="background-color: #70bc34; color: rgb(255, 246, 216);">Carrito de Compras</button>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>`;
+const navbarInferior = `
+<nav class="navbar navbar-expand-lg navbar-taller">
+    <div class="container d-flex justify-content-between">
+        <a href="/arbustos/" class="btn1" style="background-color: #70bc34; color: rgb(255, 246, 216);">Arbustos</a>
+        <a href="/tierrahoja/" class="btn1" style="background-color: #70bc34; color: rgb(255, 246, 216);">Tierra de hojas</a>
+        <a href="/flores/" class="btn1" style="background-color: #70bc34; color: rgb(255, 246, 216);">Flores</a>
+        <a href="/maceteros/" class="btn1" style="background-color: #70bc34; color: rgb(255, 246, 216);">Maceteros</a>
+        <a href="/contacto/" class="btn1" style="background-color: #70bc34; color: rgb(255, 246, 216);">Contacto</a>
+    </div>
+</nav>`;
+    $('#navbarSuperior').html(navbarSuperior);
+    $('#navbarInferior').html(navbarInferior);
+
+
+    
+}

@@ -1,3 +1,4 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="es">
 
@@ -5,73 +6,29 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>HERBOSHOP | ARBUSTOS</title>
-    <link rel="stylesheet" type="text/css" href="style.css">
-    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    
     <!-- Agrega el enlace al archivo CSS de Bootstrap -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"
+    <!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"
         integrity="sha512-GrE9Uvu7WmVeK4Rj7LbMfm4Y9eHvvJGqeUmPa2KZQJKqCeUbK/m1P4uAu5NjEbx7XgzSdKDqKn1TmVYAwV6f1w=="
-        crossorigin="anonymous" referrerpolicy="no-referrer" />
+        crossorigin="anonymous" referrerpolicy="no-referrer" /> -->
+        
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+        <script src="{% static 'js/validaciones.js' %}"></script>
+        <script> 
+          $(document).ready(function() {
+              crearnavbar();
+         
+          });
+          </script>
+  <!-- Fin de enlaces a estilos CSS -->
 </head>
-
 <body style="background-color: rgb(255, 246, 216);">
-    <header>
-        <!-- Barra de navegación superior con logo -->
-        <nav class="navbar navbar-expand-lg navbar-taller">
-            <div class="container-fluid">
-                <div class="navbar-header">
-                    <a class="navbar-brand" href="index.html">
-                        <img src="img/logo/logo.png" style="max-width:100%;height:auto;" alt="Logo" width="100">
-                    </a>
-                </div>
-                <div class="d-flex ml-auto align-items-center">
-                    <div class="search-bar d-flex align-items-center mr-4">
-                        <input type="text" placeholder="Buscar..." class="form-control">
-                        <button type="submit" class="btn btn-primary ml-2">Buscar</button>
-                    </div>
-                    <!-- Menú de navegación y botones -->
-                    <ul class="navbar-nav d-flex align-items-center">
-                        <li class="nav-item">
-                            <a href="registro.html" class="btn" style="background-color: #70bc34; color: rgb(255, 246, 216); margin-right: 10px;">Regístrate</a>
-                        </li>
-                        <li class="nav-item dropdown">
-                            <a class="btn dropdown-toggle" style="background-color: #70bc34; color: rgb(255, 246, 216); margin-right: 10px;" id="loginDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Iniciar Sesión</a>
-                            <div class="dropdown-menu dropdown-menu-right p-3" aria-labelledby="loginDropdown">
-                                <form class="form" method="post" action="#">
-                                    <div class="form-group">
-                                        <label for="username">Usuario</label>
-                                        <input type="text" class="form-control" id="username" placeholder="Usuario">
-                                    </div>
-                                    <div class="form-group">
-                                        <label for="password">Contraseña</label>
-                                        <input type="password" class="form-control" id="password" placeholder="Contraseña">
-                                    </div>
-                                    <button type="submit" class="btn btn-primary">Iniciar Sesión</button>
-                                </form>
-                            </div>
-                        </li>
-                        <li class="nav-item">
-                            <a href="index.html" class="btn" style="background-color: #70bc34; color: rgb(255, 246, 216);">Volver Inicio</a>
-                        </li>
-                    </ul>
-                    <ul class="navbar-nav ml-auto">
-                        <li class="nav-item dropdown">
-                            <button class="btn btn-success ml-2" onclick="verCarrito()" style="background-color: #70bc34; color: rgb(255, 246, 216);">Carrito de Compras</button>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-        </nav>
-        <nav class="navbar-categories">
-            <div class="container d-flex justify-content-between">
-                <a href="arbustos.html" class="btn1" style="background-color: #70bc34; color: rgb(255, 246, 216);">Arbustos</a>
-                <a href="tierrahoja.html" class="btn1" style="background-color: #70bc34; color: rgb(255, 246, 216);">Tierra de hojas</a>
-                <a href="flores.html" class="btn1" style="background-color: #70bc34; color: rgb(255, 246, 216);">Flores</a>
-                <a href="maceteros.html" class="btn1" style="background-color: #70bc34; color: rgb(255, 246, 216);">Maceteros</a>
-                <a href="contacto.html" class="btn1" style="background-color: #70bc34; color: rgb(255, 246, 216);">Contacto</a>
-            </div>
-        </nav>
+<header>
+  <div id="navbarSuperior"></div>
+  <div id="navbarInferior"></div>
     </header>
 
     <!-- Carrusel -->
@@ -84,20 +41,20 @@
         <div class="carousel-inner">
             <div class="carousel-item active">
                 <!-- Añade la clase img-fluid a las imágenes del carrusel -->
-                <img src="img/bannearbu/bannearbu2.jpg" class="d-block img-fluid max-height-700" alt="Trabajo 1">
+                <img src="{% static 'img/bannearbu/bannearbu1.jpg' %}" class="d-block img-fluid max-height-700" alt="Trabajo 1">
                 <div class="carousel-caption d-none d-md-block">
                     <h5>Coprosma negro</h5>
                 </div>
             </div>
             <!-- Añade las clases img-fluid a las imágenes restantes del carrusel -->
             <div class="carousel-item">
-                <img src="img/bannearbu/bannearbu3.jpg" class="d-block img-fluid max-height-700" alt="Trabajo 2">
+                <img src="{% static 'img/Banneflor/banneflor2.jpg' %}" class="d-block img-fluid max-height-700" alt="Trabajo 2">
                 <div class="carousel-caption d-none d-md-block">
                     <h5>Diosma verde</h5>
                 </div>
             </div>
             <div class="carousel-item">
-                <img src="img/bannearbu/bannearbu1.jpg" class="d-block img-fluid max-height-700" alt="Reparación de neumático">
+                <img src="{% static 'img/bannearbu/bannearbu1.jpg' %}" class="d-block img-fluid max-height-700" alt="Reparación de neumático">
                 <div class="carousel-caption d-none d-md-block">
                     <h5>Laurocerasus</h5>
                 </div>

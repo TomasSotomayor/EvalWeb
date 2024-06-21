@@ -1,3 +1,4 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="es">
 
@@ -5,7 +6,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>HERBOSHOP |  TIERRA DE HOJAS</title>
-    {% load static %}
     <link rel="stylesheet" type="text/css" href="style.css">
     <!-- Agrega el enlace al archivo CSS de Bootstrap -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
@@ -13,70 +13,20 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css"
         integrity="sha512-GrE9Uvu7WmVeK4Rj7LbMfm4Y9eHvvJGqeUmPa2KZQJKqCeUbK/m1P4uAu5NjEbx7XgzSdKDqKn1TmVYAwV6f1w=="
         crossorigin="anonymous" referrerpolicy="no-referrer" />
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+        <script src="{% static 'js/validaciones.js' %}"></script>
+        <script> 
+          $(document).ready(function() {
+              crearnavbar();
+         
+          });
+          </script>
+  <!-- Fin de enlaces a estilos CSS -->
 </head>
-
 <body style="background-color: rgb(255, 246, 216);">
-    <header>
-        <!-- Barra de navegación superior con logo -->
-        <!-- Barra de navegación superior con logo -->
-        <nav class="navbar navbar-taller">
-            <div class="container-fluid">
-                <div class="navbar-header">
-                    <a class="navbar-brand" href="index.html">
-                        <img src="img/logo/logo.png" style="max-width:100%;height:auto;" alt="Logo" width="100">
-                    </a>
-                </div>
-                <div class="search-bar ml-auto d-flex justify-content-between">
-                    <!-- Añadiendo las clases d-flex y justify-content-between aquí -->
-                    <input type="text" placeholder="Buscar...">
-                    <button type="submit" class="ml-2">Buscar</button>
-                    <!-- Moviendo el botón de búsqueda aquí y añadiendo la clase ml-2 -->
-                </div>
-                <!-- Menú desplegable en la esquina superior derecha -->
-                <ul class="navbar-nav ml-auto">
-                    <li class="nav-item dropdown">
-                        <a href="registro.html" class="btn" style="background-color: #70bc34; color: rgb(255, 246, 216);">Registrate</a>
-                        </a>
-                    </li>
-                </ul>
-                <li class="nav-item dropdown">
-                    <a class="btn dropdown-toggle" style="background-color: #70bc34; color: rgb(255, 246, 216); margin-right: 10px;" id="loginDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Iniciar Sesión</a>
-                    <div class="dropdown-menu dropdown-menu-right p-3" aria-labelledby="loginDropdown">
-                        <form class="form" method="post" action="#">
-                            <div class="form-group">
-                                <label for="username">Usuario</label>
-                                <input type="text" class="form-control" id="username" placeholder="Usuario">
-                            </div>
-                            <div class="form-group">
-                                <label for="password">Contraseña</label>
-                                <input type="password" class="form-control" id="password" placeholder="Contraseña">
-                            </div>
-                            <button type="submit" class="btn btn-primary">Iniciar Sesión</button>
-                        </form>
-                    </div>
-                </li>
-                <ul class="navbar-nav ml-auto">
-                    <li class="nav-item dropdown">
-                        <a href="index.html" class="btn" style="background-color: #70bc34; color: rgb(255, 246, 216);">Volver Inicio</a>
-                        </a>
-                    </li>
-                </ul>
-                <ul class="navbar-nav ml-auto">
-                    <li class="nav-item dropdown">
-                        <button class="btn btn-success ml-2" onclick="verCarrito()" style="background-color: #70bc34; color: rgb(255, 246, 216);">Carrito de Compras</button>
-                    </li>
-                </ul>
-            </div>
-        </nav>
-        <nav class="navbar-categories">
-            <div class="container d-flex justify-content-between">
-                <a href="arbustos.html" class="btn1" style="background-color: #70bc34; color: rgb(255, 246, 216);">Arbustos</a>
-                <a href="tierrahoja.html" class="btn1" style="background-color: #70bc34; color: rgb(255, 246, 216);">Tierra de hojas</a>
-                <a href="flores.html" class="btn1" style="background-color: #70bc34; color: rgb(255, 246, 216);">Flores</a>
-                <a href="maceteros.html" class="btn1"1 style="background-color: #70bc34; color: rgb(255, 246, 216);">Maceteros</a>
-                <a href="contacto.html" class="btn1"1 style="background-color: #70bc34; color: rgb(255, 246, 216);">Contacto</a>
-            </div>
-        </nav>
+<header>
+  <div id="navbarSuperior"></div>
+  <div id="navbarInferior"></div>
     </header>
 
     <!-- Carrusel -->

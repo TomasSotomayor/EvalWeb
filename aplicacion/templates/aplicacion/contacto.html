@@ -68,7 +68,8 @@
         <!-- Contenido principal de la página de contacto -->
         <div class="contact-form">
             <h2>Formulario de Contacto</h2>
-            <form action="#" method="POST">
+            <form action="enviarcontacto/" method="POST">
+                {% csrf_token %}
                 <div class="form-group">
                     <label for="name">Nombre</label>
                     <input type="text" class="form-control" id="name" name="name" required>

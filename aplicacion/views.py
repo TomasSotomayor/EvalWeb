@@ -14,6 +14,11 @@ def flores(request):
 def index(request):
     return render(request, 'aplicacion/index.html')
 
+def enviarcontacto(request):
+
+    
+    return render(request, 'aplicacion/index.html')
+
 def maceteros(request):
     return render(request, 'aplicacion/maceteros.html')
 

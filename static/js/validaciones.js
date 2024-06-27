@@ -78,8 +78,9 @@ function crearnavbar(){
                        style="background-color: #70bc34; color: rgb(255, 246, 216); margin-right: 10px;"
                        id="loginDropdown" role="button" data-toggle="dropdown" aria-haspopup="true"
                        aria-expanded="false">Iniciar Sesión</a>
-                    <div class="dropdown-menu dropdown-menu-right p-3" aria-labelledby="loginDropdown">
+                    <div class="dropdown-menu dropdown-menu-right p-3" aria-labelledby="loginDropdown" style="z-index: 2;">
                         <form class="form" method="post" action="#">
+                        <div class="row">
                             <div class="form-group">
                                 <label for="username">Usuario</label>
                                 <input type="text" class="form-control" id="username"
@@ -91,6 +92,7 @@ function crearnavbar(){
                                        placeholder="Contraseña">
                             </div>
                             <button type="submit" class="btn btn-primary">Iniciar Sesión</button>
+                        </div>
                         </form>
                     </div>
                 </li>
@@ -111,7 +113,7 @@ function crearnavbar(){
     </div>
 </nav>`;
 const navbarInferior = `
-<nav class="navbar navbar-expand-lg navbar-taller">
+<nav class="navbar navbar-expand-lg navbar-taller" style="z-index: 1;">
     <div class="container d-flex justify-content-between">
         <a href="/arbustos/" class="btn1" style="background-color: #70bc34; color: rgb(255, 246, 216);">Arbustos</a>
         <a href="/tierrahoja/" class="btn1" style="background-color: #70bc34; color: rgb(255, 246, 216);">Tierra de hojas</a>

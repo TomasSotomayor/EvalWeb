@@ -15,21 +15,21 @@
         /* Estilos personalizados para la página de maceteros */
         /* Puedes agregar estilos adicionales aquí */
     </style>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-<script src="{% static 'js/validaciones.js' %}"></script>
-<script> 
-  $(document).ready(function() {
-      crearnavbar();
- 
-  });
-  </script>
-<!-- Fin de enlaces a estilos CSS -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="{% static 'js/validaciones.js' %}"></script>
+    <script>
+        $(document).ready(function() {
+            crearnavbar();
+        });
+    </script>
+    <!-- Fin de enlaces a estilos CSS -->
 </head>
+
 <body style="background-color: rgb(255, 246, 216);">
-<header>
-<div id="navbarSuperior"></div>
-<div id="navbarInferior"></div>
-</header>
+    <header>
+        <div id="navbarSuperior"></div>
+        <div id="navbarInferior"></div>
+    </header>
     <!-- Carrusel -->
     <div id="carouselExampleCaptions" class="carousel slide" data-ride="carousel">
         <ol class="carousel-indicators">
@@ -68,7 +68,7 @@
             <span class="sr-only">Next</span>
         </a>
     </div>
-    
+
     <!-- Separación entre las imágenes inferiores y el pie de página -->
     <div class="separator"></div>
 
@@ -77,17 +77,17 @@
         <div class="row">
             <!-- Primera fila -->
             <div class="col-md-4">
-                <img src="img/flor/flor1.jpeg" class="img-fluid" alt="Imagen 1">
+                <img src="{% static 'img/flor/flor1.jpeg' %}" class="img-fluid" alt="Imagen 1">
                 <h3>Ramo de rosas rojas $29.990</h3>
                 <button class="btn btn-success" onclick="agregarAlCarrito(29990)">Comprar</button>
             </div>
             <div class="col-md-4">
-                <img src="img/flor/flor2.jpg" class="img-fluid" alt="Imagen 2">
+                <img src="{% static 'img/flor/flor2.jpg' %}" class="img-fluid" alt="Imagen 2">
                 <h3>Ramo de rosas blancas y flores $27.990</h3>
                 <button class="btn btn-success" onclick="agregarAlCarrito(27990)">Comprar</button>
             </div>
             <div class="col-md-4">
-                <img src="img/flor/flor3.jpg" class="img-fluid" alt="Imagen 3">
+                <img src="{% static 'img/flor/flor3.jpg' %}" class="img-fluid" alt="Imagen 3">
                 <h3>Ramo de rosas rosadas $26.990 </h3>
                 <button class="btn btn-success" onclick="agregarAlCarrito(26990)">Comprar</button>
             </div>
@@ -95,23 +95,23 @@
         <div class="row" style="margin-bottom: 20px;">
             <!-- Segunda fila -->
             <div class="col-md-4">
-                <img src="img/flor/flor4.jpg" class="img-fluid" alt="Imagen 4">
+                <img src="{% static 'img/flor/flor4.jpg' %}" class="img-fluid" alt="Imagen 4">
                 <h3>Ramo de flores surtidas $25.990</h3>
                 <button class="btn btn-success" onclick="agregarAlCarrito(25990)">Comprar</button>
             </div>
             <div class="col-md-4">
-                <img src="img/flor/flor5.jpg" class="img-fluid" alt="Imagen 5">
+                <img src="{% static 'img/flor/flor5.jpg' %}" class="img-fluid" alt="Imagen 5">
                 <h3>Ramo de rosas $24.990</h3>
                 <button class="btn btn-success" onclick="agregarAlCarrito(24990)">Comprar</button>
             </div>
             <div class="col-md-4">
-                <img src="img/flor/flor6.jpg" class="img-fluid" alt="Imagen 6">
+                <img src="{% static 'img/flor/flor6.jpg' %}" class="img-fluid" alt="Imagen 6">
                 <h3>Ramo de rosas blancas y rojas $39.990</h3>
                 <button class="btn btn-success" onclick="agregarAlCarrito(39990)">Comprar</button>
             </div>
         </div>
     </div>
-    
+
     <!-- Separación entre las imágenes inferiores y el pie de página -->
     <div class="separator"></div>
 
@@ -151,18 +151,18 @@
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-    
+
     <!-- Funcionalidad del carrito de compras -->
     <script>
         let total = 0;
         let carrito = [];
-    
+
         function agregarAlCarrito(precio) {
             carrito.push(precio);
             total += precio;
             alert(`Producto agregado al carrito. Total a pagar: $${total}`);
         }
-    
+
         function verCarrito() {
             if (carrito.length === 0) {
                 alert("El carrito de compras está vacío");
@@ -179,4 +179,3 @@
 </body>
 
 </html>
-

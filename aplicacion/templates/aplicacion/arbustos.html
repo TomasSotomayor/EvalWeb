@@ -79,17 +79,17 @@
         <div class="row">
             <!-- Primera fila -->
             <div class="col-md-4">
-                <img src="img/arbu/arbu1.jpg" class="img-fluid" alt="Imagen 1">
+                <img src="{% static 'img/arbu/arbu1.jpg' %}" class="img-fluid" alt="Imagen 1">
                 <h3>Arbusto flores amarillas $19.990</h3>
                 <button class="btn btn-success" onclick="agregarAlCarrito(19990)">Comprar</button>
             </div>
             <div class="col-md-4">
-                <img src="img/arbu/arbu2.jpg" class="img-fluid" alt="Imagen 2">
+                <img src="{% static 'img/arbu/arbu2.jpg' %}" class="img-fluid" alt="Imagen 2">
                 <h3>Arbusto sureño $24.990</h3>
                 <button class="btn btn-success" onclick="agregarAlCarrito(24990)">Comprar</button>
             </div>
             <div class="col-md-4">
-                <img src="img/arbu/arbu3.jpg" class="img-fluid" alt="Imagen 3">
+                <img src="{% static 'img/arbu/arbu3.jpg' %}" class="img-fluid" alt="Imagen 3">
                 <h3>Arbusto común $22.990</h3>
                 <button class="btn btn-success" onclick="agregarAlCarrito(22990)">Comprar</button>
             </div>
@@ -97,17 +97,17 @@
         <div class="row" style="margin-bottom: 20px;">
             <!-- Segunda fila -->
             <div class="col-md-4">
-                <img src="img/arbu/arbu4.jpg" class="img-fluid" alt="Imagen 4">
+                <img src="{% static 'img/arbu/arbu4.jpg' %}" class="img-fluid" alt="Imagen 4">
                 <h3>Arbusto común redondo $30.000</h3>
                 <button class="btn btn-success" onclick="agregarAlCarrito(30000)">Comprar</button>
             </div>
             <div class="col-md-4">
-                <img src="img/arbu/arbu5.jpg" class="img-fluid" alt="Imagen 5">
+                <img src="{% static 'img/arbu/arbu5.jpg' %}" class="img-fluid" alt="Imagen 5">
                 <h3>Arbusto del norte $35.990</h3>
                 <button class="btn btn-success" onclick="agregarAlCarrito(35990)">Comprar</button>
             </div>
             <div class="col-md-4">
-                <img src="img/arbu/arbu6.jpg" class="img-fluid" alt="Imagen 6">
+                <img src="{% static 'img/arbu/arbu6.jpg' %}" class="img-fluid" alt="Imagen 6">
                 <h3>Arbusto de california $42.990</h3>
                 <button class="btn btn-success" onclick="agregarAlCarrito(42990)">Comprar</button>
             </div>
@@ -157,13 +157,13 @@
     <script>
         let total = 0;
         let carrito = [];
-    
+
         function agregarAlCarrito(precio) {
             carrito.push(precio);
             total += precio;
             alert(`Producto agregado al carrito. Total a pagar: $${total}`);
         }
-    
+
         function verCarrito() {
             if (carrito.length === 0) {
                 alert("El carrito de compras está vacío");

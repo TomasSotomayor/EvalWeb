@@ -1,11 +1,12 @@
 # aplicacion/views.py
-from django.shortcuts import render,get_object_or_404
+from django.shortcuts import render,get_object_or_404,redirect
 from django.http import JsonResponse
 from .models import Usuario, TipoUsuario, TipoProducto, Producto, Compra,Suscripcion,DetalleCompra
 import traceback
 from django.forms.models import model_to_dict
 from django.core.files.storage import FileSystemStorage
 from uuid import uuid4
+from .forms import TipoUsuarioForm
 import os
 
 def administrar(request):
@@ -74,6 +75,28 @@ def iniciarsesion(request):
                 })
     else:
             return JsonResponse({'estado': 'fallido'})
+    
+def lista_tipos_usuario(request):
+    tipos_usuarios = TipoUsuario.objects.all()
+    return render(request, 'usuarios/lista_tipos_usuario.html', {'tipos_usuarios': tipos_usuarios})
+
+def editar_tipo_usuario(request, id):
+    tipo_usuario = get_object_or_404(TipoUsuario, IdTipoUsuario=id)
+    if request.method == 'POST':
+        form = TipoUsuarioForm(request.POST, instance=tipo_usuario)
+        if form.is_valid():
+            form.save()
+            return redirect('lista_tipos_usuario')
+    else:
+        form = TipoUsuarioForm(instance=tipo_usuario)
+    return render(request, 'usuarios/editar_tipo_usuario.html', {'form': form})
+
+def eliminar_tipo_usuario(request, id):
+    tipo_usuario = get_object_or_404(TipoUsuario, IdTipoUsuario=id)
+    if request.method == 'POST':
+        tipo_usuario.delete()
+        return redirect('lista_tipos_usuario')
+    return render(request, 'usuarios/confirmar_eliminar.html', {'tipo_usuario': tipo_usuario})
 
     
     

@@ -223,6 +223,47 @@ function agregarTipoUsuario(){
 
 }
 
+// agregar tipo producto
+function agregarTipoProducto(){
+    nombre = $('#nombre').val();
+    var fd = new FormData();
+    fd.append("nombre", nombre);
+    $.ajax({
+        type: "POST",
+        url: "/agregarTipoProducto/",
+        data: fd,
+        contentType: false,
+        processData: false,
+        headers: { "X-CSRFToken": getCookie("csrftoken") },
+        success: function (response) {
+            console.log(response);
+            if (response.Excepciones != null) {
+                alert('Ha ocurrido un error inesperado');
+                console.log(response.Excepciones.message + '\n' + response.Excepciones.type + '\n' + response.Excepciones.details);
+                return;
+            }
+            if (response.error != null) {
+                alert(response.error);
+                return;
+            }
+            if(response.estado === 'completado') {
+                alert('Tipo de producto agregado exitosamente');
+                window.location.href = '/administrar/mantenedorTipoProducto/';
+            }
+            if (response.estado === 'fallido') {
+                alert('No se pudo agregar el tipo de producto');
+                window.location.href = '/administrar/mantenedorTipoProducto/';
+            }
+
+        },
+        error: function (XMLHttpRequest, text, error) { ; alert(XMLHttpRequest.responseText); },
+        failure: function (response) { alert(response); }
+    });
+
+}
+
+
+
 
 
 function getCookie(name) {

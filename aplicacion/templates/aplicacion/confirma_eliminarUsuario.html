@@ -1,12 +1,12 @@
 {% block content %}
 <div class="container mt-5">
-    <h1 class="text-center">Editar Tipo de Usuario</h1>
+    <h1 class="text-center">Confirmar Eliminación</h1>
     <div class="card mt-4">
         <div class="card-body">
+            <p>¿Estás seguro que deseas eliminar "{{ usuario.nombre }}"?</p>
             <form method="POST">
                 {% csrf_token %}
-                {{ form.as_p }}
-                <button type="submit" class="btn btn-primary">Guardar cambios</button>
+                <button type="submit" class="btn btn-danger">Eliminar</button>
                 <a href="../../mantenedorUsuarios" class="btn btn-secondary">Cancelar</a>
             </form>
         </div>

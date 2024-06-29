@@ -6,7 +6,7 @@ import traceback
 from django.forms.models import model_to_dict
 from django.core.files.storage import FileSystemStorage
 from uuid import uuid4
-from .forms import TipoUsuarioForm
+from .forms import TipoUsuarioForm, UsuarioForm
 import os
 
 def administrar(request):
@@ -40,7 +40,9 @@ def tierrahoja(request):
     return render(request, 'aplicacion/tierrahoja.html')
 
 def mantenedorUsuarios(request):
-    return render(request, 'aplicacion/usuario.html')
+    usuarios = Usuario.objects.all()
+    tipos_usuarios = TipoUsuario.objects.all() 
+    return render(request, 'aplicacion/usuario.html', {'usuarios': usuarios , 'tipos_usuarios': tipos_usuarios})
 
 def mantenedorTipoProducto(request):
     return render(request, 'aplicacion/tipoproducto.html')
@@ -49,7 +51,7 @@ def mantenedorProductos(request):
     return render(request, 'aplicacion/producto.html')
 
 def mantenedorTipoUsuario(request):
-    tipos_usuarios = TipoUsuario.objects.all()  # Obtiene todos los objetos de TipoUsuario
+    tipos_usuarios = TipoUsuario.objects.all() 
     return render(request, 'aplicacion/tipousuario.html', {'tipos_usuarios': tipos_usuarios})
 
 def iniciarsesion(request):
@@ -78,7 +80,56 @@ def iniciarsesion(request):
             return JsonResponse({'estado': 'fallido'})
 
 
+# INICIO VISTAS USUARIO
 
+def lista_usuarios(request):
+    usuarios = Usuario.objects.all()
+    return render(request, 'aplicacion/lista_usuarios.html', {'usuarios': usuarios})
+
+def editar_usuario(request, pk):
+    usuario = get_object_or_404(Usuario, IdUsuario=pk)
+    if request.method == 'POST':
+        form = UsuarioForm(request.POST, instance=usuario)
+        if form.is_valid():
+            form.save()
+            return redirect('../../administrar/mantenedorUsuarios/')
+    else:
+        form = UsuarioForm(instance=usuario)
+    return render(request, 'aplicacion/editar_usuario.html', {'form': form})
+
+def eliminar_usuario(request, pk):
+    usuario = get_object_or_404(Usuario, IdUsuario=pk)
+    if request.method == 'POST':
+        usuario.delete()
+        return redirect('../../administrar/mantenedorUsuarios/')
+    return render(request, 'aplicacion/confirma_eliminarUsuario.html', {'usuario': usuario})
+
+def agregarUsuario(request):
+    if request.method == 'POST':
+        try:
+            nombre = request.POST.get('nombre')
+            correo = request.POST.get('correo')
+            contrasena = request.POST.get('contrasena')
+            tipo_usuario = TipoUsuario.objects.get(IdTipoUsuario=request.POST.get('tipoUsuario'))
+            usuario = Usuario(nombre=nombre, email=correo, password=contrasena, tipo_usuario=tipo_usuario)
+            usuario.save()
+            return JsonResponse({'estado': 'completado'})
+        except Exception as e:
+            return JsonResponse({
+                'Excepciones': {
+                    'message': str(e),  # Mensaje de la excepción
+                    'type': type(e).__name,  # Tipo de la excepción
+                    'details': traceback.format_exc()  # Detalles de la excepción
+                }
+            })
+    else:
+        return JsonResponse({'estado': 'fallido'})
+    
+
+
+
+
+# FIN VISTAS USUARIO
 
 
 

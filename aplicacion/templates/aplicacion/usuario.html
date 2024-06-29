@@ -35,13 +35,52 @@
                         <label for="password">Password</label>
                         <input type="text" class="form-control" id="password" placeholder="Password">
                     </div>
+                    <div class="form-group">
+                        <label for="tipo_usuario">Tipo de usuario</label>
+                        <select class="form-control" id="cmbTipoUsuario">
+                            <option value="0">Seleccione un tipo de usuario</option>
+                            {% for tipo_usuario in tipos_usuarios %}
+                            <option value="{{ tipo_usuario.IdTipoUsuario }}">{{ tipo_usuario.nombre }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
                    
-                    <button type="submit" class="btn btn-primary">Guardar usuario</button>
+                    <button type="button" class="btn btn-primary" onclick="agregarUsuario();">Guardar usuario</button>
                 </form>
             </div>
         </div>
     </div>
 
+    <div class="container mt-5">
+        <h1 class="text-center">Usuarios</h1>
+        <div class="card mt-4">
+            <div class="card-body">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Nombre</th>
+                            <th>Email</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for usuario in usuarios %}
+                        <tr>
+                            <td>{{ usuario.IdUsuario }}</td>
+                            <td>{{ usuario.nombre }}</td>
+                            <td>{{ usuario.email }}</td>
+                            <td>
+                                <a href="{% url 'editar_usuario' usuario.IdUsuario %}" class="btn btn-sm btn-primary">Editar</a>
+                                <a href="{% url 'eliminar_usuario' usuario.IdUsuario %}" class="btn btn-sm btn-danger">Eliminar</a>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
 
 </body>
 </html>

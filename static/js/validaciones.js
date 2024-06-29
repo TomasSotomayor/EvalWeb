@@ -184,8 +184,65 @@ function iniciarsesion(){
 
 }
 
+function agregarUsuario(){
+    nombre = $('#nombre').val();
+    correo = $('#email').val();
+    contrasena = $('#password').val();
+    tipoUsuario = $('#cmbTipoUsuario').val();
+
+    if (nombre === '' || correo === '' || contrasena === '' || tipoUsuario === '') {
+        return alert('Por favor, rellene los campos.');
+    }
+    if (tipoUsuario == '0') {
+        return alert('Por favor, seleccione un tipo de usuario.');
+    }
+
+
+    var fd = new FormData();
+    fd.append("nombre", nombre);
+    fd.append("correo", correo);
+    fd.append("contrasena", contrasena);
+    fd.append("tipoUsuario", tipoUsuario);
+    $.ajax({
+        type: "POST",
+        url: "/agregarUsuario/",
+        data: fd,
+        contentType: false,
+        processData: false,
+        headers: { "X-CSRFToken": getCookie("csrftoken") },
+        success: function (response) {
+            console.log(response);
+            if (response.Excepciones != null) {
+                alert('Ha ocurrido un error inesperado');
+                console.log(response.Excepciones.message + '\n' + response.Excepciones.type + '\n' + response.Excepciones.details);
+                return;
+            }
+            if (response.error != null) {
+                alert(response.error);
+                return;
+            }
+            if(response.estado === 'completado') {
+                alert('Usuario agregado exitosamente');
+                window.location.href = '/administrar/mantenedorUsuarios/';
+            }
+            if (response.estado === 'fallido') {
+                alert('No se pudo agregar el usuario');
+                window.location.href = '/administrar/mantenedorUsuarios/';
+            }
+
+        },
+        error: function (XMLHttpRequest, text, error) { ; alert(XMLHttpRequest.responseText); },
+        failure: function (response) { alert(response); }
+    });
+
+}
+
 
 function agregarTipoUsuario(){
+    if ($('#nombre').val() === '') {
+        return alert('Por favor, rellene los campos.');
+    }
+
     nombre = $('#nombre').val();
     var fd = new FormData();
     fd.append("nombre", nombre);

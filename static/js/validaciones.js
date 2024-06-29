@@ -184,6 +184,47 @@ function iniciarsesion(){
 
 }
 
+
+function agregarTipoUsuario(){
+    nombre = $('#nombre').val();
+    var fd = new FormData();
+    fd.append("nombre", nombre);
+    $.ajax({
+        type: "POST",
+        url: "/agregarTipoUsuario/",
+        data: fd,
+        contentType: false,
+        processData: false,
+        headers: { "X-CSRFToken": getCookie("csrftoken") },
+        success: function (response) {
+            console.log(response);
+            if (response.Excepciones != null) {
+                alert('Ha ocurrido un error inesperado');
+                console.log(response.Excepciones.message + '\n' + response.Excepciones.type + '\n' + response.Excepciones.details);
+                return;
+            }
+            if (response.error != null) {
+                alert(response.error);
+                return;
+            }
+            if(response.estado === 'completado') {
+                alert('Tipo de usuario agregado exitosamente');
+                window.location.href = '/administrar/mantenedorTipoUsuario/';
+            }
+            if (response.estado === 'fallido') {
+                alert('No se pudo agregar el tipo de usuario');
+                window.location.href = '/administrar/mantenedorTipoUsuario/';
+            }
+
+        },
+        error: function (XMLHttpRequest, text, error) { ; alert(XMLHttpRequest.responseText); },
+        failure: function (response) { alert(response); }
+    });
+
+}
+
+
+
 function getCookie(name) {
     var cookieValue = null;
     if (document.cookie && document.cookie !== '') {

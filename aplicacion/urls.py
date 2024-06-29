@@ -18,7 +18,13 @@ urlpatterns = [
     path('administrar/mantenedorProductos/', views.mantenedorProductos, name='mantenedorProductos'),
     path('administrar/mantenedorTipoUsuario/', views.mantenedorTipoUsuario, name='mantenedorTipoUsuario'),
     path('administrar/mantenedorTipoProducto/', views.mantenedorTipoProducto, name='mantenedorTipoProducto'),
-    # Otras rutas de URL aquí si las tienes
+
+    path('mantenedorTipoUsuario/lista-tipos-usuario/', views.lista_tipos_usuario, name='lista_tipos_usuario'),
+    path('editar-tipo-usuario/<int:pk>/', views.editar_tipo_usuario, name='editar_tipo_usuario'),
+    path('eliminar-tipo-usuario/<int:pk>/', views.eliminar_tipo_usuario, name='eliminar_tipo_usuario'),
+    path('agregarTipoUsuario/', views.agregarTipoUsuario, name='agregarTipoUsuario'),
+
+    
 ]
 
 

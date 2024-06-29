@@ -49,7 +49,8 @@ def mantenedorProductos(request):
     return render(request, 'aplicacion/producto.html')
 
 def mantenedorTipoUsuario(request):
-    return render(request, 'aplicacion/tipousuario.html')
+    tipos_usuarios = TipoUsuario.objects.all()  # Obtiene todos los objetos de TipoUsuario
+    return render(request, 'aplicacion/tipousuario.html', {'tipos_usuarios': tipos_usuarios})
 
 def iniciarsesion(request):
     if request.method == 'POST':
@@ -75,29 +76,53 @@ def iniciarsesion(request):
                 })
     else:
             return JsonResponse({'estado': 'fallido'})
-    
+
+
+
+
+
+
+
+# INICIO VISTAS TIPO USUARIO    
 def lista_tipos_usuario(request):
     tipos_usuarios = TipoUsuario.objects.all()
-    return render(request, 'usuarios/lista_tipos_usuario.html', {'tipos_usuarios': tipos_usuarios})
+    return render(request, 'aplicacion/lista_tipos_usuario.html', {'tipos_usuarios': tipos_usuarios})
 
-def editar_tipo_usuario(request, id):
-    tipo_usuario = get_object_or_404(TipoUsuario, IdTipoUsuario=id)
+def editar_tipo_usuario(request, pk):
+    tipo_usuario = get_object_or_404(TipoUsuario, IdTipoUsuario=pk)
     if request.method == 'POST':
         form = TipoUsuarioForm(request.POST, instance=tipo_usuario)
         if form.is_valid():
             form.save()
-            return redirect('lista_tipos_usuario')
+            return redirect('../../administrar/mantenedorTipoUsuario/')
     else:
         form = TipoUsuarioForm(instance=tipo_usuario)
-    return render(request, 'usuarios/editar_tipo_usuario.html', {'form': form})
+    return render(request, 'aplicacion/editar_tipo_usuario.html', {'form': form})
 
-def eliminar_tipo_usuario(request, id):
-    tipo_usuario = get_object_or_404(TipoUsuario, IdTipoUsuario=id)
+def eliminar_tipo_usuario(request, pk):
+    tipo_usuario = get_object_or_404(TipoUsuario, IdTipoUsuario=pk)
     if request.method == 'POST':
         tipo_usuario.delete()
-        return redirect('lista_tipos_usuario')
-    return render(request, 'usuarios/confirmar_eliminar.html', {'tipo_usuario': tipo_usuario})
+        return redirect('../../administrar/mantenedorTipoUsuario/')
+    return render(request, 'aplicacion/confirma_eliminarTipoUsuario.html', {'tipo_usuario': tipo_usuario})
 
     
-    
- 
+
+def agregarTipoUsuario (request):
+    if request.method == 'POST':
+        try:
+            nombre = request.POST.get('nombre')
+            tipo_usuario = TipoUsuario(nombre=nombre)
+            tipo_usuario.save()
+            return JsonResponse({'estado': 'completado'})
+        except Exception as e:
+            return JsonResponse({
+                'Excepciones': {
+                    'message': str(e),  # Mensaje de la excepción
+                    'type': type(e).__name,  # Tipo de la excepción
+                    'details': traceback.format_exc()  # Detalles de la excepción
+                }
+            })
+    else:
+        return JsonResponse({'estado': 'fallido'})
+# FIN VISTAS TIPO USUARIO

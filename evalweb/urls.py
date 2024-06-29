@@ -6,7 +6,5 @@ from aplicacion import views
 urlpatterns = [
     path('', include('aplicacion.urls') ),
     path('registro/', views.registro, name='registro'),
-    path('contacto/', include('aplicacion.urls') ),
-      # Ensure this line is present
-    # other paths if present
+    path('administrar/', include('aplicacion.urls')),
 ]

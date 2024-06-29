@@ -39,7 +39,16 @@ def tierrahoja(request):
     return render(request, 'aplicacion/tierrahoja.html')
 
 def mantenedorUsuarios(request):
-    return render(request, 'aplicacion/usuarios.html')
+    return render(request, 'aplicacion/usuario.html')
+
+def mantenedorTipoProducto(request):
+    return render(request, 'aplicacion/tipoproducto.html')
+
+def mantenedorProductos(request):
+    return render(request, 'aplicacion/producto.html')
+
+def mantenedorTipoUsuario(request):
+    return render(request, 'aplicacion/tipousuario.html')
 
 def iniciarsesion(request):
     if request.method == 'POST':

@@ -79,7 +79,7 @@ function crearnavbar(){
                        id="loginDropdown" role="button" data-toggle="dropdown" aria-haspopup="true"
                        aria-expanded="false">Iniciar Sesión</a>
                     <div class="dropdown-menu dropdown-menu-right p-3" aria-labelledby="loginDropdown" style="z-index: 2;">
-                        <form class="form" method="post" action="#">
+                        <form class="form" method="post" action="iniciarsesion">
                         <div class="row">
                             <div class="form-group">
                                 <label for="username">Usuario</label>
@@ -91,7 +91,7 @@ function crearnavbar(){
                                 <input type="password" class="form-control" id="password"
                                        placeholder="Contraseña">
                             </div>
-                            <button type="submit" class="btn btn-primary">Iniciar Sesión</button>
+                            <button type="button" onclick="iniciarsesion();" class="btn btn-primary">Iniciar Sesión</button>
                         </div>
                         </form>
                     </div>
@@ -127,4 +127,72 @@ const navbarInferior = `
 
 
     
+}
+
+
+function iniciarsesion(){
+    var contrasena = $('#password').val();
+    var usuario = $('#username').val();
+    if (usuario === '' || contrasena === '') {
+        return alert( '\nPor favor, rellene los campos.');
+    }
+    var fd = new FormData();
+    fd.append("usuario", usuario);
+    fd.append("contrasena", contrasena);
+
+    $.ajax({
+        type: "POST",
+        url: "/iniciarsesion/",
+        data: fd,
+        contentType: false,
+        processData: false,
+        headers: { "X-CSRFToken": getCookie("csrftoken") },
+        success: function (response) {
+            console.log(response);
+            if (response.Excepciones != null) {
+                alert('Ha ocurrido un error inesperado');
+                console.log(response.Excepciones.message + '\n' + response.Excepciones.type + '\n' + response.Excepciones.details);
+                return;
+            }
+            if (response.error != null) {
+                alert(response.error);
+                return;
+            }
+            if(response.estado === 'completado' && response.tipo_usuario == 1) {
+                alert('Inicio de sesión exitoso');
+                window.location.href = '/administrar/';
+            }
+            if(response.estado === 'completado' && response.tipo_usuario != 1) {
+                alert('Inicio de sesión exitoso');
+                window.location.href = '/';
+
+            }
+            if (response.estado === 'fallido') {
+                alert('Inicio de sesión fallido');
+                window.location.href = '/';
+            }
+
+        },
+        error: function (XMLHttpRequest, text, error) { ; alert(XMLHttpRequest.responseText); },
+        failure: function (response) { alert(response); }
+    });
+
+
+
+
+}
+
+function getCookie(name) {
+    var cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+        var cookies = document.cookie.split(';');
+        for (var i = 0; i < cookies.length; i++) {
+            var cookie = jQuery.trim(cookies[i]);
+            if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
 }

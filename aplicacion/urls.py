@@ -14,6 +14,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('iniciarsesion/' , views.iniciarsesion, name= 'iniciarsesion'),
     path('administrar/', views.administrar, name= 'administrar'),
+    path('administrar/mantenedorUsuarios/', views.mantenedorUsuarios, name='mantenedorUsuarios'),
     # Otras rutas de URL aquí si las tienes
 ]
 

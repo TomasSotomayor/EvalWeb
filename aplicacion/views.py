@@ -38,6 +38,9 @@ def registro(request):
 def tierrahoja(request):
     return render(request, 'aplicacion/tierrahoja.html')
 
+def mantenedorUsuarios(request):
+    return render(request, 'aplicacion/usuarios.html')
+
 def iniciarsesion(request):
     if request.method == 'POST':
             try:

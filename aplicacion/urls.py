@@ -31,6 +31,12 @@ urlpatterns = [
     path('eliminar-tipo-usuario/<int:pk>/', views.eliminar_tipo_usuario, name='eliminar_tipo_usuario'),
     path('agregarTipoUsuario/', views.agregarTipoUsuario, name='agregarTipoUsuario'),
 
+
+    path('mantenedorTipoProducto/lista-tipos-producto/', views.lista_tipos_producto, name='lista_tipos_producto'),
+    path('editar-tipo-producto/<int:pk>/', views.editar_tipo_producto, name='editar_tipo_producto'),
+    path('eliminar-tipo-producto/<int:pk>/', views.eliminar_tipo_producto, name='eliminar_tipo_producto'),
+    path('agregarTipoProducto/', views.agregarTipoProducto, name='agregarTipoProducto'),
+
     
 ]
 

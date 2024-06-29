@@ -32,6 +32,36 @@
         </div>
     </div>
 
+    <div class="container mt-5">
+        <h1 class="text-center">Tipos de Productos</h1>
+        <div class="card mt-4">
+            <div class="card-body">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Nombre</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for tipo_producto in tipos_productos %}
+                        <tr>
+                            <td>{{ tipo_producto.IdTipoProducto }}</td>
+                            <td>{{ tipo_producto.nombre }}</td>
+                            <td>
+                                <a href="{% url 'editar_tipo_producto' tipo_producto.IdTipoProducto %}" class="btn btn-sm btn-primary">Editar</a>
+                                <a href="{% url 'eliminar_tipo_producto' tipo_producto.IdTipoProducto %}" class="btn btn-sm btn-danger">Eliminar</a>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    
+
 
 </body>
 </html>

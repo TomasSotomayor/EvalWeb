@@ -140,6 +140,8 @@ function iniciarsesion(){
     fd.append("usuario", usuario);
     fd.append("contrasena", contrasena);
 
+
+    console.log('entre');
     $.ajax({
         type: "POST",
         url: "/iniciarsesion/",

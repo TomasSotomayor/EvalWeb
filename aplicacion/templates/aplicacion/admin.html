@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Admin Panel</title>
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <!-- Des comenta y usa Font Awesome si es necesario -->
@@ -15,148 +15,23 @@
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/popper.min.js"></script>
     <!-- Bootstrap JS -->
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-
-    <style>
-        body {
-            background: linear-gradient(to bottom, #98FB98, #FFFFE0, #8B4513);
-            /* Gradiente verde, amarillo y café */
-            margin: 0;
-            font-family: Arial, sans-serif;
-        }
-
-        #registroForm {
-            border: 2px solid green;
-            padding: 20px;
-            border-radius: 5px;
-            background-color: #FFFFE0;
-            /* Color amarillo claro */
-            max-width: 400px;
-            margin: 50px auto;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-        }
-
-        #registroForm input[type="text"],
-        #registroForm input[type="number"],
-        #registroForm select {
-            background-color: #98FB98;
-            /* Color verde claro */
-            border: 1px solid #ccc;
-            padding: 10px;
-            margin: 10px 0;
-            width: calc(100% - 22px);
-        }
-
-        #registroForm button {
-            background-color: #8B4513;
-            /* Color café */
-            color: white;
-            border: none;
-            padding: 10px 20px;
-            cursor: pointer;
-            margin-top: 10px;
-        }
-
-        #registroForm button:hover {
-            background-color: #A0522D;
-            /* Color café más claro al pasar el mouse */
-        }
-
-        a {
-            display: block;
-            text-align: center;
-            margin-top: 20px;
-            color: #8B4513;
-            text-decoration: none;
-        }
-
-        a:hover {
-            text-decoration: underline;
-        }
-
-    </style>
-
-<script> 
-  $(document).ready(function() {
-      crearnavbar();
- 
-  });
-  </script>
 </head>
-    <body style="background-color: rgb(255, 246, 216);">
-        <header>
-        <div id="navbarSuperior"></div>
-        <div id="navbarInferior"></div>
-            </header>
-            
-            <h1>Formulario de Registro</h1>
-            <form id="registroForm">
-                <label for="rut">Rut:</label>
-                <input type="text" id="rut" name="rut"><br>
-        
-                <label for="nombre">Nombre:</label>
-                <input type="text" id="nombre" name="nombre"><br>
-        
-                <label for="apellidoPaterno">Apellido Paterno:</label>
-                <input type="text" id="apellidoPaterno" name="apellidoPaterno"><br>
-        
-                <label for="apellidoMaterno">Apellido Materno:</label>
-                <input type="text" id="apellidoMaterno" name="apellidoMaterno"><br>
-        
-                <label for="e-mail">E-mail:</label>
-                <input type="text" id="e-mail" name="e-mail"><br>
-        
-                <label for="genero">Género:</label>
-                <select id="genero" name="genero">
-                    <option value="">Seleccione</option>
-                    <option value="masculino">Masculino</option>
-                    <option value="femenino">Femenino</option>
-                    <option value="otro">Otro</option>
-                </select><br>
-        
-                <label for="celular">Celular:</label>
-                <input type="text" id="celular" name="celular"><br>
-        
-                <button type="submit">Registrar</button>
-            </form>
-        
-            <!-- Enlace hacia index.html -->
-            <a href="index.html">Volver a la página principal</a>
-        
-            <!-- Pie de página -->
-            <footer>
-                <div class="container-fluid footer">
-                    <div class="container">
-                        <div class="row">
-                            <div class="col-md-4">
-                                <h5>Contáctanos</h5>
-                                <p>Dirección: Av. Vicuña Mackenna 4917, 8970117 San Joaquín, Región Metropolitana</p>
-                                <p>Teléfono: (2) 2560 6700</p>
-                                <p>Email: info@plantas.com</p>
-                            </div>
-                            <div class="col-md-4">
-                                <h5>Enlaces útiles</h5>
-                                <ul>
-                                    <li><a href="index.html">Inicio</a></li>
-                                    <li><a href="contacto.html">Contacto</a></li>
-                                </ul>
-                            </div>
-                            <div class="col-md-4">
-                                <h5>Síguenos</h5>
-                                <ul>
-                                    <li><a href="https://www.Facebook.com"><i class="fab fa-facebook"></i> Facebook</a></li>
-                                    <li><a href="https://www.Twitter.com"><i class="fab fa-twitter"></i> Twitter</a></li>
-                                    <li><a href="https://www.instagram.com"><i class="fab fa-instagram"></i> Instagram</a></li>
-                                    <li><a href="https://www.Linkedin.com"><i class="fab fa-linkedin"></i> LinkedIn</a></li>
-                                </ul>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </footer>
-        
-
-
-
-    
+<body>
+    <div class="container d-flex justify-content-center align-items-center" style="height: 100vh;">
+        <div class="row">
+            <div class="col-12 mb-3">
+                <button class="btn btn-primary btn-block">Usuario</button>
+            </div>
+            <div class="col-12 mb-3">
+                <button class="btn btn-primary btn-block">Producto</button>
+            </div>
+            <div class="col-12 mb-3">
+                <button class="btn btn-primary btn-block">Tipo Usuario</button>
+            </div>
+            <div class="col-12 mb-3">
+                <button class="btn btn-primary btn-block">Tipo Producto</button>
+            </div>
+        </div>
+    </div>
 </body>
 </html>

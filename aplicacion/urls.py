@@ -13,6 +13,7 @@ urlpatterns = [
     path('enviarcontacto/', views.enviarcontacto, name='enviarcontacto'),
     path('admin/', admin.site.urls),
     path('iniciarsesion/' , views.iniciarsesion, name= 'iniciarsesion'),
+    path('administrar/', views.administrar, name= 'administrar'),
     # Otras rutas de URL aquí si las tienes
 ]
 

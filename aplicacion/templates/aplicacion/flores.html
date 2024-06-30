@@ -75,42 +75,15 @@
     <div class="container">
         <div class="row">
             <!-- Primera fila -->
+            {% for producto in productos %}
             <div class="col-md-4">
-                <img src="{% static 'img/flor/flor1.jpeg' %}" class="img-fluid" alt="Imagen 1">
-                <h3>Ramo de rosas rojas $29.990</h3>
-                <button class="btn btn-success" onclick="agregarAlCarrito(29990)">Comprar</button>
+                <img src="{% static 'img/ImagenesProducto/' %}{{ producto.imagen }}" class="img-fluid" alt="Imagen 1">
+                <h3>{{ producto.nombre }} ${{ producto.precio }}</h3>
+                <button class="btn btn-success" onclick="agregarAlCarrito(19990)">Comprar</button>
             </div>
-            <div class="col-md-4">
-                <img src="{% static 'img/flor/flor2.jpg' %}" class="img-fluid" alt="Imagen 2">
-                <h3>Ramo de rosas blancas y flores $27.990</h3>
-                <button class="btn btn-success" onclick="agregarAlCarrito(27990)">Comprar</button>
-            </div>
-            <div class="col-md-4">
-                <img src="{% static 'img/flor/flor3.jpg' %}" class="img-fluid" alt="Imagen 3">
-                <h3>Ramo de rosas rosadas $26.990 </h3>
-                <button class="btn btn-success" onclick="agregarAlCarrito(26990)">Comprar</button>
-            </div>
-        </div>
-        <div class="row" style="margin-bottom: 20px;">
-            <!-- Segunda fila -->
-            <div class="col-md-4">
-                <img src="{% static 'img/flor/flor4.jpg' %}" class="img-fluid" alt="Imagen 4">
-                <h3>Ramo de flores surtidas $25.990</h3>
-                <button class="btn btn-success" onclick="agregarAlCarrito(25990)">Comprar</button>
-            </div>
-            <div class="col-md-4">
-                <img src="{% static 'img/flor/flor5.jpg' %}" class="img-fluid" alt="Imagen 5">
-                <h3>Ramo de rosas $24.990</h3>
-                <button class="btn btn-success" onclick="agregarAlCarrito(24990)">Comprar</button>
-            </div>
-            <div class="col-md-4">
-                <img src="{% static 'img/flor/flor6.jpg' %}" class="img-fluid" alt="Imagen 6">
-                <h3>Ramo de rosas blancas y rojas $39.990</h3>
-                <button class="btn btn-success" onclick="agregarAlCarrito(39990)">Comprar</button>
-            </div>
+            {% endfor %}
         </div>
     </div>
-
     <!-- Separación entre las imágenes inferiores y el pie de página -->
     <div class="separator"></div>
 

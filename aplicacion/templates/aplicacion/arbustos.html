@@ -77,39 +77,13 @@
     <div class="container">
         <div class="row">
             <!-- Primera fila -->
+            {% for producto in productos %}
             <div class="col-md-4">
-                <img src="{% static 'img/arbu/arbu1.jpg' %}" class="img-fluid" alt="Imagen 1">
-                <h3>Arbusto flores amarillas $19.990</h3>
+                <img src="{% static 'img/ImagenesProducto/' %}{{ producto.imagen }}" class="img-fluid" alt="Imagen 1">
+                <h3>{{ producto.nombre }} ${{ producto.precio }}</h3>
                 <button class="btn btn-success" onclick="agregarAlCarrito(19990)">Comprar</button>
             </div>
-            <div class="col-md-4">
-                <img src="{% static 'img/arbu/arbu2.jpg' %}" class="img-fluid" alt="Imagen 2">
-                <h3>Arbusto sureño $24.990</h3>
-                <button class="btn btn-success" onclick="agregarAlCarrito(24990)">Comprar</button>
-            </div>
-            <div class="col-md-4">
-                <img src="{% static 'img/arbu/arbu3.jpg' %}" class="img-fluid" alt="Imagen 3">
-                <h3>Arbusto común $22.990</h3>
-                <button class="btn btn-success" onclick="agregarAlCarrito(22990)">Comprar</button>
-            </div>
-        </div>
-        <div class="row" style="margin-bottom: 20px;">
-            <!-- Segunda fila -->
-            <div class="col-md-4">
-                <img src="{% static 'img/arbu/arbu4.jpg' %}" class="img-fluid" alt="Imagen 4">
-                <h3>Arbusto común redondo $30.000</h3>
-                <button class="btn btn-success" onclick="agregarAlCarrito(30000)">Comprar</button>
-            </div>
-            <div class="col-md-4">
-                <img src="{% static 'img/arbu/arbu5.jpg' %}" class="img-fluid" alt="Imagen 5">
-                <h3>Arbusto del norte $35.990</h3>
-                <button class="btn btn-success" onclick="agregarAlCarrito(35990)">Comprar</button>
-            </div>
-            <div class="col-md-4">
-                <img src="{% static 'img/arbu/arbu6.jpg' %}" class="img-fluid" alt="Imagen 6">
-                <h3>Arbusto de california $42.990</h3>
-                <button class="btn btn-success" onclick="agregarAlCarrito(42990)">Comprar</button>
-            </div>
+            {% endfor %}
         </div>
     </div>
     

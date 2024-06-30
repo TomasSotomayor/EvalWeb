@@ -75,39 +75,13 @@
 <div class="container">
     <div class="row">
         <!-- Primera fila -->
-        <div class="col-md-4 mb-3">
-            <img src="{% static 'img/mace/macetero1.jpg' %}" class="img-fluid" alt="Imagen 1">
-            <h3>Macetero mediano cactus $3.000</h3>
-            <button class="btn btn-success" onclick="agregarAlCarrito(3000)">Comprar</button>
+        {% for producto in productos %}
+        <div class="col-md-4">
+            <img src="{% static 'img/ImagenesProducto/' %}{{ producto.imagen }}" class="img-fluid" alt="Imagen 1">
+            <h3>{{ producto.nombre }} ${{ producto.precio }}</h3>
+            <button class="btn btn-success" onclick="agregarAlCarrito(19990)">Comprar</button>
         </div>
-        <div class="col-md-4 mb-3">
-            <img src="{% static 'img/mace/macetero2.jpg' %}" class="img-fluid" alt="Imagen 2">
-            <h3>Macetero chico cactus $2.000</h3>
-            <button class="btn btn-success" onclick="agregarAlCarrito(2000)">Comprar</button>
-        </div>
-        <div class="col-md-4 mb-3">
-            <img src="{% static 'img/mace/macetero3.png' %}" class="img-fluid" alt="Imagen 3">
-            <h3>Macetero grande $5.000</h3>
-            <button class="btn btn-success" onclick="agregarAlCarrito(5000)">Comprar</button>
-        </div>
-    </div>
-    <div class="row">
-        <!-- Segunda fila -->
-        <div class="col-md-4 mb-3">
-            <img src="{% static 'img/mace/macetero4.jpg' %}" class="img-fluid" alt="Imagen 4">
-            <h3>Macetero colgante $3.000</h3>
-            <button class="btn btn-success" onclick="agregarAlCarrito(3000)">Comprar</button>
-        </div>
-        <div class="col-md-4 mb-3">
-            <img src="{% static 'img/mace/macetero5.jpg' %}" class="img-fluid" alt="Imagen 5">
-            <h3>Macetero grande $4.500</h3>
-            <button class="btn btn-success" onclick="agregarAlCarrito(4500)">Comprar</button>
-        </div>
-        <div class="col-md-4 mb-3">
-            <img src="{% static 'img/mace/macetero6.jpg' %}" class="img-fluid" alt="Imagen 6">
-            <h3>Macetero chico $2.000</h3>
-            <button class="btn btn-success" onclick="agregarAlCarrito(2000)">Comprar</button>
-        </div>
+        {% endfor %}
     </div>
 </div>
 

@@ -75,39 +75,13 @@
 <div class="container">
     <div class="row">
         <!-- Primera fila -->
+        {% for producto in productos %}
         <div class="col-md-4">
-            <img src="{% static 'img/thoja/thoja1.png' %}" class="img-fluid" alt="Imagen 1">
-            <h4>Tierra de hojas Compost $9.990</h4>
-            <button class="btn btn-success" onclick="agregarAlCarrito(9990)">Comprar</button>
+            <img src="{% static 'img/ImagenesProducto/' %}{{ producto.imagen }}" class="img-fluid" alt="Imagen 1">
+            <h3>{{ producto.nombre }} ${{ producto.precio }}</h3>
+            <button class="btn btn-success" onclick="agregarAlCarrito(19990)">Comprar</button>
         </div>
-        <div class="col-md-4">
-            <img src="{% static 'img/thoja/thoja2.jpg' %}" class="img-fluid" alt="Imagen 2">
-            <h4>Tierra de hojas Comun $7.990</h4>
-            <button class="btn btn-success" onclick="agregarAlCarrito(7990)">Comprar</button>
-        </div>
-        <div class="col-md-4">
-            <img src="{% static 'img/thoja/thoja3.jpg' %}" class="img-fluid" alt="Imagen 3">
-            <h4>Tierra de hojas Armony $11.990</h4>
-            <button class="btn btn-success" onclick="agregarAlCarrito(11990)">Comprar</button>
-        </div>
-    </div>
-    <div class="row">
-        <!-- Segunda fila -->
-        <div class="col-md-4">
-            <img src="{% static 'img/thoja/thoja4.jpg' %}" class="img-fluid" alt="Imagen 4">
-            <h4>Tierra organica Compost $14.990</h4>
-            <button class="btn btn-success" onclick="agregarAlCarrito(14990)">Comprar</button>
-        </div>
-        <div class="col-md-4">
-            <img src="{% static 'img/thoja/thoja5.jpg' %}" class="img-fluid" alt="Imagen 5">
-            <h4>Tierra Terra Garden $3.990</h4>
-            <button class="btn btn-success" onclick="agregarAlCarrito(3990)">Comprar</button>
-        </div>
-        <div class="col-md-4">
-            <img src="{% static 'img/thoja/thoja6.jpg' %}" class="img-fluid" alt="Imagen 6">
-            <h4>Tierra Happy Flower $1.990</h4>
-            <button class="btn btn-success" onclick="agregarAlCarrito(1990)">Comprar</button>
-        </div>
+        {% endfor %}
     </div>
 </div>
 

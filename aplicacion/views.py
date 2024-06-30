@@ -7,6 +7,7 @@ from django.forms.models import model_to_dict
 from django.core.files.storage import FileSystemStorage
 from uuid import uuid4
 from .forms import TipoUsuarioForm,TipoProductoForm,UsuarioForm
+
 import os
 
 def administrar(request):
@@ -14,13 +15,16 @@ def administrar(request):
      
 
 def arbustos(request):
-    return render(request, 'aplicacion/arbustos.html')
+    productos = Producto.objects.raw('SELECT * FROM aplicacion_producto WHERE tipo_producto_id = %s', [12])
+    return render(request, 'aplicacion/arbustos.html',{'productos': productos})
+
 
 def contacto(request):
     return render(request, 'aplicacion/contacto.html')
 
 def flores(request):
-    return render(request, 'aplicacion/flores.html')
+    productos = Producto.objects.raw('SELECT * FROM aplicacion_producto WHERE tipo_producto_id = %s', [10])
+    return render(request, 'aplicacion/flores.html',{'productos': productos})
 
 def index(request):
     return render(request, 'aplicacion/index.html')
@@ -31,13 +35,15 @@ def enviarcontacto(request):
     return render(request, 'aplicacion/index.html')
 
 def maceteros(request):
-    return render(request, 'aplicacion/maceteros.html')
+    productos = Producto.objects.raw('SELECT * FROM aplicacion_producto WHERE tipo_producto_id = %s', [9])
+    return render(request, 'aplicacion/maceteros.html',{'productos': productos})
 
 def registro(request):
     return render(request, 'aplicacion/registro.html')
 
 def tierrahoja(request):
-    return render(request, 'aplicacion/tierrahoja.html')
+    productos = Producto.objects.raw('SELECT * FROM aplicacion_producto WHERE tipo_producto_id = %s', [11])
+    return render(request, 'aplicacion/tierrahoja.html',{'productos': productos})
 
 def mantenedorUsuarios(request):
     usuarios = Usuario.objects.all()

@@ -40,6 +40,12 @@ urlpatterns = [
     path('eliminar-tipo-producto/<int:pk>/', views.eliminar_tipo_producto, name='eliminar_tipo_producto'),
     path('agregarTipoProducto/', views.agregarTipoProducto, name='agregarTipoProducto'),
 
+
+    path('mantenedorTipoProducto/lista-producto/', views.lista_producto, name='lista_producto'),
+    path('editar-producto/<int:pk>/', views.editar_producto, name='editar_producto'),
+    path('eliminar-producto/<int:pk>/', views.eliminar_producto, name='eliminar_producto'),
+    
+
     
 ]
 

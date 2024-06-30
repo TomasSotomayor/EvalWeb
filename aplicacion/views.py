@@ -242,7 +242,7 @@ def GrabarProducto(request):
 
             imagen_archivo = request.FILES.get('Imagen')  
             imagen = f"{nombre}-{imagen_archivo.name}"
-            fs = FileSystemStorage(location='EvalWeb/static/img/imagenesProducto')
+            fs = FileSystemStorage(location='static/img/imagenesProducto')
             if fs.exists(imagen):
                 return JsonResponse({'error': 'Ya existe un archivo con este nombre, suba otra.'})
             filename = fs.save(imagen, imagen_archivo)
@@ -264,4 +264,36 @@ def GrabarProducto(request):
         return JsonResponse({'estado': 'fallido'})
 
 
+def lista_producto(request):
+    tipos_producto = Producto.objects.all()
+    return render(request, 'aplicacion/lista_producto.html', {'tipos_productos': tipos_producto})
+
+def editar_producto(request, pk):
+    return 1
+#     tipo_producto = get_object_or_404(Producto, IdTipoProducto=pk)
+#     if request.method == 'POST':
+#         form = ProductoForm(request.POST, instance=tipo_producto)
+#         if form.is_valid():
+#             form.save()
+#             return redirect('../../administrar/mantenedorTipoProducto/')
+#     else:
+#         form = ProductoForm(instance=tipo_producto)
+#     return render(request, 'aplicacion/editar_tipo_producto.html', {'form': form})
+
+def eliminar_producto(request, pk):
+    producto = get_object_or_404(Producto, IdProducto=pk)
+    if request.method == 'POST':
+        producto.delete()
+        return redirect('../../administrar/mantenedorProductos/')
+    return render(request, 'aplicacion/confirma_eliminarProducto.html', {'producto': producto})
+
 # FIN VISTAS PRODUCTO
+
+
+
+
+
+
+
+
+# vistas 

@@ -55,6 +55,40 @@
         </div>
     </div>
 
+    <div class="container mt-5">
+        <h1 class="text-center">Productos</h1>
+        <div class="card mt-4">
+            <div class="card-body">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>precio</th>
+                            <th>stock</th>
+                            <th>Nombre</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for x in productos %}
+                        <tr>
+
+                            <td>{{ x.IdProducto }}</td>
+                            <td>{{ x.precio }}</td>
+                            <td>{{ x.stock }}</td>
+                            <td>{{ x.nombre }}</td>
+                            <td>
+                                <a href="{% url 'editar_producto' x.IdProducto %}" class="btn btn-sm btn-primary">Editar</a>
+                                <a href="{% url 'eliminar_producto' x.IdProducto %}" class="btn btn-sm btn-danger">Eliminar</a>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
 
 </body>
 </html>

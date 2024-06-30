@@ -92,6 +92,7 @@ function crearnavbar(){
                                        placeholder="Contraseña">
                             </div>
                             <button type="button" onclick="iniciarsesion();" class="btn btn-primary">Iniciar Sesión</button>
+                            <button type="button" onclick="UsuarioAdmin();" class="btn btn-primary">Usuario Admin</button>
                         </div>
                         </form>
                     </div>
@@ -517,4 +518,9 @@ function confirmarEditarProducto(){
     });
 
 
+}
+function UsuarioAdmin(){
+    $('#username').val('admin@admin.cl');
+    $('#password').val('1234');
+    iniciarsesion();
 }

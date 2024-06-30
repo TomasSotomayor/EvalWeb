@@ -18,6 +18,8 @@ urlpatterns = [
     path('administrar/mantenedorProductos/', views.mantenedorProductos, name='mantenedorProductos'),
     path('administrar/mantenedorTipoUsuario/', views.mantenedorTipoUsuario, name='mantenedorTipoUsuario'),
     path('administrar/mantenedorTipoProducto/', views.mantenedorTipoProducto, name='mantenedorTipoProducto'),
+    path('BuscarProductoEditar/', views.BuscarProductoEditar, name='BuscarProductoEditar'),
+    path('ConfirmarEditarProducto/', views.ConfirmarEditarProducto, name='ConfirmarEditarProducto'),
 
     path('GrabarProducto/', views.GrabarProducto, name='GrabarProducto'),
 

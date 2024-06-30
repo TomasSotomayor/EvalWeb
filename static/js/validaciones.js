@@ -407,3 +407,114 @@ function grabarProducto(){
         failure: function (response) { alert(response); }
     });
 }
+
+function buscarProductoEditar(idProducto){
+var fd = new FormData();
+fd.append("idProducto", idProducto);
+$.ajax({
+    type: "POST",
+    url: "/BuscarProductoEditar/",
+    data: fd,
+    contentType: false,
+    processData: false,
+    headers: { "X-CSRFToken": getCookie("csrftoken") },
+    success: function (response) {
+        console.log(response);
+        if (response.Excepciones != null) {
+            alert('Ha ocurrido un error inesperado');
+            console.log(response.Excepciones.message + '\n' + response.Excepciones.type + '\n' + response.Excepciones.details);
+            return;
+        }
+        if (response.error != null) {
+            alert(response.error);
+            return;
+        }
+        if(response.estado === 'completado') {
+            $('#nombre').val(response.producto.nombre);
+            $('#precio').val(response.producto.precio);
+            $('#stock').val(response.producto.stock);
+            $('#cmbTipoProducto').val(response.producto.tipo_producto.IdTipoProducto);
+            $('#divImagen').html('<img src="../../../static/img/imagenesProducto/' + response.producto.imagen + '" alt="Imagen actual del producto" style="max-width: 100%; height: auto;">');
+        } else {
+            alert('Falló la búsqueda del producto');
+        }
+    },
+    error: function (XMLHttpRequest, text, error) { ; alert(XMLHttpRequest.responseText); },
+    failure: function (response) { alert(response); }
+});
+
+
+
+}
+
+
+function confirmarEditarProducto(){
+    var msg = '';
+    var nombre = $('#nombre').val();
+    var precio = $('#precio').val();
+    var stock = $('#stock').val();
+    var tipo = $('#cmbTipoProducto').val();
+    var archivo = $('#ImagenProducto').prop('files')[0];
+
+    if (nombre.toString() === '' || precio.toString() === '' || stock.toString() === ''|| tipo.toString() === '') {
+        msg = msg + '\nPor favor, rellene todos los campos.';
+    }
+    if (tipo.toString() === '0') {
+        msg = msg + '\nPor favor, seleccione un tipo de producto.';
+    }
+    if (isNaN(parseFloat(precio)) || parseFloat(precio) <= 0) {
+        msg = msg + '\nPor favor, introduzca un precio valido.';
+    }
+    if (isNaN(parseInt(stock)) || parseInt(stock) < 0) {
+        msg = msg + '\nPor favor, introduzca un stock valido.';
+    }
+    if (archivo != null) {
+        if (archivo.name.split('.').pop().toLowerCase() != 'jpg' && archivo.name.split('.').pop().toLowerCase() != 'jpeg' && archivo.name.split('.').pop().toLowerCase() != 'png') {
+            msg = msg + '\nPor favor, seleccione una imagen con formato jpg, jpeg o png.';
+        }
+    }
+
+    if (msg != '') {
+        alert(msg);
+        return;
+    }
+    var fd = new FormData();
+    fd.append("Nombre", nombre);
+    fd.append("PrecioUnitario", precio);
+    fd.append("Stock", stock);
+    fd.append("TipoProducto", tipo);
+    fd.append("Imagen", archivo);
+    fd.append("idProducto", $('#idProducto').text());
+
+    $.ajax({
+        type: "POST",
+        url: "/ConfirmarEditarProducto/",
+        data: fd,
+        contentType: false,
+        processData: false,
+        headers: { "X-CSRFToken": getCookie("csrftoken") },
+        success: function (response) {
+            console.log(response);
+            if (response.Excepciones != null) {
+                alert('Ha ocurrido un error inesperado');
+                console.log(response.Excepciones.message + '\n' + response.Excepciones.type + '\n' + response.Excepciones.details);
+                return;
+            }
+            if (response.error != null) {
+                alert(response.error);
+                return;
+            }
+            if(response.estado === 'completado') {
+                alert('Producto editado con éxito');
+                window.location.href = '/administrar/mantenedorProductos/';
+            } else {
+                alert('Falló la edición del producto');
+                window.location.href = '/administrar/mantenedorProductos/';
+
+            }
+
+        }
+    });
+
+
+}

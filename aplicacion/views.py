@@ -263,26 +263,90 @@ def GrabarProducto(request):
     else:
         return JsonResponse({'estado': 'fallido'})
 
+def BuscarProductoEditar(request):
+    if request.method == 'POST':
+        try:
+            id_producto = request.POST.get('idProducto')
+            producto = get_object_or_404(Producto, IdProducto=id_producto)
+            
+            # Convertir el objeto producto a un diccionario
+            producto_dict = model_to_dict(producto)
+            # Asegúrate de que el modelo Producto tiene un campo 'tipo_producto' que es una FK a TipoProducto
+            tipo_producto_dict = model_to_dict(producto.tipo_producto)
+            
+            # Agregar el diccionario del tipo de producto al diccionario del producto
+            producto_dict['tipo_producto'] = tipo_producto_dict
+            
+            return JsonResponse({'estado': 'completado', 'producto': producto_dict})
+        except Exception as e:
+            return JsonResponse({
+                'Excepciones': {
+                    'message': str(e),  # Mensaje de la excepción
+                    'type': type(e).__name__,  # Tipo de la excepción
+                    'details': traceback.format_exc()  # Detalles de la excepción
+                }
+            })
+    else:
+        return JsonResponse({'estado': 'fallido'})
 
 def lista_producto(request):
     tipos_producto = Producto.objects.all()
     return render(request, 'aplicacion/lista_producto.html', {'tipos_productos': tipos_producto})
 
 def editar_producto(request, pk):
-    return 1
-#     tipo_producto = get_object_or_404(Producto, IdTipoProducto=pk)
-#     if request.method == 'POST':
-#         form = ProductoForm(request.POST, instance=tipo_producto)
-#         if form.is_valid():
-#             form.save()
-#             return redirect('../../administrar/mantenedorTipoProducto/')
-#     else:
-#         form = ProductoForm(instance=tipo_producto)
-#     return render(request, 'aplicacion/editar_tipo_producto.html', {'form': form})
+    producto = get_object_or_404(Producto, IdProducto=pk)
+    tipos_productos = TipoProducto.objects.all() 
+    return render(request, 'aplicacion/editar_producto.html', {'pk': pk , 'producto': producto , 'tipos_productos': tipos_productos})
+
+
+
+
+def ConfirmarEditarProducto(request):
+    if request.method == 'POST':
+        try:
+            id_producto = request.POST.get('idProducto')
+            nombre = request.POST.get('Nombre')
+            tipo_producto_id = request.POST.get('TipoProducto')
+            precio = request.POST.get('PrecioUnitario')
+            stock = request.POST.get('Stock')
+
+            imagen_archivo = request.FILES.get('Imagen')  
+            tipo_producto = get_object_or_404(TipoProducto, pk=tipo_producto_id)
+            producto = Producto.objects.get(IdProducto=id_producto)
+            if imagen_archivo is not None:
+                imagenBorrar = producto.imagen
+                imagen = f"{nombre}-{imagen_archivo.name}"
+                fs = FileSystemStorage(location='static/img/imagenesProducto')
+                fs.delete(imagenBorrar)
+                if fs.exists(imagen):
+                    return JsonResponse({'error': 'Ya existe un archivo con este nombre, suba otra.'})
+                filename = fs.save(imagen, imagen_archivo)
+                ruta_completa = fs.url(filename)
+                producto.imagen = imagen
+
+            producto.nombre = nombre
+            producto.tipo_producto = tipo_producto
+            producto.precio = precio
+            producto.stock = stock
+            producto.save()
+            return JsonResponse({'estado': 'completado'})
+        except Exception as e:
+            return JsonResponse({
+                'Excepciones': {
+                    'message': str(e),  # Mensaje de la excepción
+                    'type': type(e).__name__,  # Tipo de la excepción
+                    'details': traceback.format_exc()  # Detalles de la excepción
+                }
+            })
+    else:
+        return JsonResponse({'estado': 'fallido'}) 
 
 def eliminar_producto(request, pk):
     producto = get_object_or_404(Producto, IdProducto=pk)
     if request.method == 'POST':
+        fs = FileSystemStorage(location='static/img/imagenesProducto/')
+        if fs.exists(producto.imagen):
+             fs.delete(producto.imagen)
         producto.delete()
         return redirect('../../administrar/mantenedorProductos/')
     return render(request, 'aplicacion/confirma_eliminarProducto.html', {'producto': producto})

@@ -49,7 +49,9 @@ def mantenedorTipoProducto(request):
     return render(request, 'aplicacion/tipoproducto.html', {'tipos_productos': tipos_productos})
 
 def mantenedorProductos(request):
-    return render(request, 'aplicacion/producto.html')
+    productos = Producto.objects.all()
+    tipos_producto = TipoProducto.objects.all()
+    return render(request, 'aplicacion/producto.html' , {'productos': productos , 'tipos_producto': tipos_producto})
 
 def mantenedorTipoUsuario(request):
     tipos_usuarios = TipoUsuario.objects.all() 
@@ -226,3 +228,40 @@ def agregarTipoProducto (request):
     else:
         return JsonResponse({'estado': 'fallido'})
 # FIN VISTAS TIPO Producto
+
+
+# INICIO VISTAS PRODUCTO
+
+def GrabarProducto(request):
+    if request.method == 'POST':
+        try:
+            nombre = request.POST.get('Nombre')
+            tipo_producto_id = request.POST.get('TipoProducto')
+            precio = request.POST.get('PrecioUnitario')
+            stock = request.POST.get('Stock')
+
+            imagen_archivo = request.FILES.get('Imagen')  
+            imagen = f"{nombre}-{imagen_archivo.name}"
+            fs = FileSystemStorage(location='EvalWeb/static/img/imagenesProducto')
+            if fs.exists(imagen):
+                return JsonResponse({'error': 'Ya existe un archivo con este nombre, suba otra.'})
+            filename = fs.save(imagen, imagen_archivo)
+            ruta_completa = fs.url(filename)
+
+            tipo_producto = get_object_or_404(TipoProducto, pk=tipo_producto_id)
+            producto = Producto(nombre=nombre, tipo_producto=tipo_producto, precio=precio, stock=stock, imagen=imagen)
+            producto.save()
+            return JsonResponse({'estado': 'completado'})
+        except Exception as e:
+            return JsonResponse({
+                'Excepciones': {
+                    'message': str(e),  # Mensaje de la excepción
+                    'type': type(e).__name__,  # Tipo de la excepción
+                    'details': traceback.format_exc()  # Detalles de la excepción
+                }
+            })
+    else:
+        return JsonResponse({'estado': 'fallido'})
+
+
+# FIN VISTAS PRODUCTO

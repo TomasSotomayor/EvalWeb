@@ -337,3 +337,73 @@ function getCookie(name) {
     }
     return cookieValue;
 }
+
+
+
+function grabarProducto(){
+    var msg = '';
+    var nombre = $('#nombre').val();
+    var precio = $('#precio').val();
+    var stock = $('#stock').val();
+    var tipo = $('#cmbTipoProducto').val();
+    var archivo = $('#ImagenProducto').prop('files')[0];
+
+    if (nombre.toString() === '' || precio.toString() === '' || stock.toString() === ''|| tipo.toString() === '') {
+        msg = msg + '\nPor favor, rellene todos los campos.';
+    }
+    if (tipo.toString() === '0') {
+        msg = msg + '\nPor favor, seleccione un tipo de producto.';
+    }
+    if (isNaN(parseFloat(precio)) || parseFloat(precio) <= 0) {
+        msg = msg + '\nPor favor, introduzca un precio valido.';
+    }
+    if (isNaN(parseInt(stock)) || parseInt(stock) < 0) {
+        msg = msg + '\nPor favor, introduzca un stock valido.';
+    }
+    if (archivo == null) {
+        msg = msg + '\nPor favor, seleccione una imagen.';
+    }
+    else if (archivo.name.split('.').pop().toLowerCase() != 'jpg' && archivo.name.split('.').pop().toLowerCase() != 'jpeg' && archivo.name.split('.').pop().toLowerCase() != 'png') {
+        msg = msg + '\nPor favor, seleccione una imagen con formato jpg, jpeg o png.';
+    }
+
+    if (msg != '') {
+        alert(msg);
+        return;
+    }
+    var fd = new FormData();
+    fd.append("Nombre", nombre);
+    fd.append("PrecioUnitario", precio);
+    fd.append("Stock", stock);
+    fd.append("TipoProducto", tipo);
+    fd.append("Imagen", archivo);
+
+    $.ajax({
+        type: "POST",
+        url: "/GrabarProducto/",
+        data: fd,
+        contentType: false,
+        processData: false,
+        headers: { "X-CSRFToken": getCookie("csrftoken") },
+        success: function (response) {
+            console.log(response);
+            if (response.Excepciones != null) {
+                alert('Ha ocurrido un error inesperado');
+                console.log(response.Excepciones.message + '\n' + response.Excepciones.type + '\n' + response.Excepciones.details);
+                return;
+            }
+            if (response.error != null) {
+                alert(response.error);
+                return;
+            }
+            if(response.estado === 'completado') {
+                alert('Producto creado con éxito');
+                window.location.href = '/administrar/mantenedorProductos/';
+            } else {
+                alert('Falló la creación del producto');
+            }
+        },
+        error: function (XMLHttpRequest, text, error) { ; alert(XMLHttpRequest.responseText); },
+        failure: function (response) { alert(response); }
+    });
+}

@@ -19,6 +19,9 @@ urlpatterns = [
     path('administrar/mantenedorTipoUsuario/', views.mantenedorTipoUsuario, name='mantenedorTipoUsuario'),
     path('administrar/mantenedorTipoProducto/', views.mantenedorTipoProducto, name='mantenedorTipoProducto'),
 
+    path('GrabarProducto/', views.GrabarProducto, name='GrabarProducto'),
+
+
     path('mantenedorUsuarios/lista-usuarios/', views.lista_usuarios, name='lista_usuarios'),
     path('editar-usuario/<int:pk>/', views.editar_usuario, name='editar_usuario'),
     path('eliminar-usuario/<int:pk>/', views.eliminar_usuario, name='eliminar_usuario'),

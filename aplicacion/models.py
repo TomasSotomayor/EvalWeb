@@ -69,5 +69,20 @@ class DetalleCompra(models.Model):
     def __str__(self):
         return f"Detalle de compra {self.IdDetalleCompra} para compra {self.compra.IdCompra}"
     
+    #separacion
+
+class Promocion(models.Model):
+    id_promocion = models.AutoField(primary_key=True)
+    id_producto = models.ForeignKey('Producto', on_delete=models.CASCADE)
+    descripcion = models.TextField()
+    descuento = models.IntegerField()
+
+    def str(self):
+        return self.nombre
+    class Meta:
+        ordering = ['id_promocion']
+
+        
+    
 
 

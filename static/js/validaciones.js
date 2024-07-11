@@ -51,6 +51,47 @@ $(document).ready(function(){
 });
 
 
+function agregarAlCarrito(idProducto){
+    var fd = new FormData();
+    fd.append("idproducto", idProducto);
+
+
+    console.log('entre');
+    $.ajax({
+        type: "POST",
+        url: "/agregaralcarro/",
+        data: fd,
+        contentType: false,
+        processData: false,
+        headers: { "X-CSRFToken": getCookie("csrftoken") },
+        success: function (response) {
+            console.log(response);
+            if (response.Excepciones != null) {
+                alert('Ha ocurrido un error inesperado');
+                console.log(response.Excepciones.message + '\n' + response.Excepciones.type + '\n' + response.Excepciones.details);
+                return;
+            }
+            if (response.error != null) {
+                alert(response.error);
+                return;
+            }
+            if(response.estado === 'completado' ) {
+                alert('Se agrego al carro');
+              
+            }
+            
+            if (response.estado === 'fallido') {
+                alert('No se pudo agregar al carro');
+             
+            }
+
+        },
+        error: function (XMLHttpRequest, text, error) { ; alert(XMLHttpRequest.responseText); },
+        failure: function (response) { alert(response); }
+    });
+
+
+}
 
 function crearnavbar(){
     const navbarSuperior = `
@@ -105,9 +146,9 @@ function crearnavbar(){
             </ul>
             <ul class="navbar-nav ml-auto">
                 <li class="nav-item dropdown">
-                    <button class="btn btn-success ml-2"
-                            onclick="verCarrito()"
-                            style="background-color: #70bc34; color: rgb(255, 246, 216);">Carrito de Compras</button>
+                    <a class="btn btn-success ml-2"
+                    href="/carrito/"
+                            style="background-color: #70bc34; color: rgb(255, 246, 216);">Carrito de Compras</a>
                 </li>
             </ul>
         </div>

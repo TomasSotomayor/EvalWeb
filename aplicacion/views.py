@@ -10,8 +10,14 @@ from .forms import TipoUsuarioForm,TipoProductoForm,UsuarioForm
 
 import os
 
+def carrito(request):
+    return render(request, 'aplicacion/carrito.html')
+
+
+
 def administrar(request):
     return render(request, 'aplicacion/admin.html')
+     
      
 
 def arbustos(request):
@@ -63,6 +69,47 @@ def mantenedorTipoUsuario(request):
     tipos_usuarios = TipoUsuario.objects.all() 
     return render(request, 'aplicacion/tipousuario.html', {'tipos_usuarios': tipos_usuarios})
 
+# Agregar al carro
+def agregaralcarro(request):
+    if request.method == 'POST':
+            try:
+                idproducto = request.POST.get('idproducto')
+                
+
+                # Comprueba si existe un usuario con el correo y contraseña proporcionados
+                carro = request.session.get('carro', {})
+
+                if 'productos' not in carro:
+                    carro['productos'] = {}
+                if idproducto in carro['productos']:
+                    return JsonResponse({'error': 'El Producto esta en el carro'})
+                else:
+                    carro['productos'][idproducto] = {'idProducto': idproducto}
+
+                # Guarda el carro actualizado en la sesión
+                request.session['carro'] = carro
+
+                return JsonResponse({'estado': 'completado'})
+            except Exception as e:
+                return JsonResponse({
+                    'Excepciones': {
+                        'message': str(e),  # Mensaje de la excepción
+                        'type': type(e).__name,  # Tipo de la excepción
+                        'details': traceback.format_exc()  # Detalles de la excepción
+                        }
+                })
+    else:
+            return JsonResponse({'estado': 'fallido'})
+
+
+
+
+
+
+
+
+
+#iniciar sesion
 def iniciarsesion(request):
     if request.method == 'POST':
             try:

@@ -1,0 +1,140 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HERBOSHOP | CARRITO DE COMPRAS</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="{% static 'js/validaciones.js' %}"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    <style>
+        body, html {
+            height: 100%;
+            margin: 0;
+            background-color: #f8f9fa;
+        }
+
+        .container-full {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .cart-form {
+            width: 100%;
+            max-width: 800px;
+            background-color: #fff;
+            padding: 40px;
+            border-radius: 8px;
+            border: 2px solid #ddd;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .cart-form h2 {
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .cart-form table {
+            width: 100%;
+            margin-bottom: 20px;
+        }
+
+        .cart-form th, .cart-form td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .cart-form th {
+            background-color: #f8f9fa;
+        }
+
+        .cart-form .product-img {
+            width: 50px;
+            height: 50px;
+            object-fit: cover;
+        }
+
+        .cart-form .btn-primary {
+            background-color: #007bff;
+            border-color: #007bff;
+            display: block;
+            width: 100%;
+        }
+    </style>
+    <script>
+        $(document).ready(function() {
+            crearnavbar();
+        });
+    </script>
+</head>
+
+<body style="background-color: rgb(255, 246, 216);">
+    <header>
+        <div id="navbarSuperior"></div>
+        <div id="navbarInferior"></div>
+    </header>
+
+    <div class="container-full">
+        <div class="cart-form">
+            <h2>Carrito de Compras</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Imagen</th>
+                        <th>Nombre del producto</th>
+                        <th>Precio</th>
+                        <th>Cantidad</th>
+                        <th>Stock</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    
+                </tbody>
+            </table>
+            <h1 id="textototal">total =</h1>
+            <button type="button" class="btn btn-primary">Proceder al Pago</button>
+        </div>
+    </div>
+
+    <footer>
+        <div class="container-fluid footer">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-4">
+                        <h5>Contáctanos</h5>
+                        <p>Dirección: Av. Vicuña Mackenna 4917, 8970117 San Joaquín, Región Metropolitana</p>
+                        <p>Teléfono: (2) 2560 6700</p>
+                        <p>Email: info@plantas.com</p>
+                    </div>
+                    <div class="col-md-4">
+                        <h5>Enlaces útiles</h5>
+                        <ul>
+                            <li><a href="index.html">Inicio</a></li>
+                            <li><a href="contacto.html">Contacto</a></li>
+                        </ul>
+                    </div>
+                    <div class="col-md-4">
+                        <h5>Síguenos</h5>
+                        <ul>
+                            <li><a href="https://www.Facebook.com"><i class="fab fa-facebook"></i> Facebook</a></li>
+                            <li><a href="https://www.Twitter.com"><i class="fab fa-twitter"></i> Twitter</a></li>
+                            <li><a href="https://www.instagram.com"><i class="fab fa-instagram"></i> Instagram</a></li>
+                            <li><a href="https://www.Linkedin.com"><i class="fab fa-linkedin"></i> LinkedIn</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+</body>
+
+</html>

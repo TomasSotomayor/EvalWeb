@@ -81,7 +81,7 @@
             <div class="col-md-4">
                 <img src="{% static 'img/ImagenesProducto/' %}{{ producto.imagen }}" class="img-fluid" alt="Imagen 1">
                 <h3>{{ producto.nombre }} ${{ producto.precio }}</h3>
-                <button class="btn btn-success" onclick="agregarAlCarrito(19990)">Comprar</button>
+                <button class="btn btn-success" onclick="agregarAlCarrito({{producto.IdProducto}})">Comprar</button>
             </div>
             {% endfor %}
         </div>
@@ -125,29 +125,7 @@
 
     
     <!-- Funcionalidad del carrito de compras -->
-    <script>
-        let total = 0;
-        let carrito = [];
 
-        function agregarAlCarrito(precio) {
-            carrito.push(precio);
-            total += precio;
-            alert(`Producto agregado al carrito. Total a pagar: $${total}`);
-        }
-
-        function verCarrito() {
-            if (carrito.length === 0) {
-                alert("El carrito de compras está vacío");
-            } else {
-                let mensaje = "Productos en el carrito:\n";
-                carrito.forEach((precio, index) => {
-                    mensaje += `Producto ${index + 1}: $${precio}\n`;
-                });
-                mensaje += `\nTotal a pagar: $${total}`;
-                alert(mensaje);
-            }
-        }
-    </script>
 </body>
 
 </html>

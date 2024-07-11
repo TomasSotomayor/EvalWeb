@@ -51,6 +51,57 @@ $(document).ready(function(){
 });
 
 
+function EliminarProductoCarrito(Obj){
+    var idProducto = $(Obj).parent().parent().find('.idProducto').attr('value');
+    var fd = new FormData();
+    fd.append("idproducto", idProducto);
+    $(Obj).parent().parent().remove();
+    $.ajax({
+        type: "POST",
+        url: "/eliminarproductocarrito/",
+        data: fd,
+        contentType: false,
+        processData: false,
+        headers: { "X-CSRFToken": getCookie("csrftoken") },
+        success: function (response) {
+            console.log(response);
+            if (response.Excepciones != null) {
+                alert('Ha ocurrido un error inesperado');
+                console.log(response.Excepciones.message + '\n' + response.Excepciones.type + '\n' + response.Excepciones.details);
+                return;
+            }
+            if (response.error != null) {
+                alert(response.error);
+                return;
+            }
+            if(response.estado === 'completado') {
+                alert('Producto eliminado con éxito');
+                actualizarPrecio();
+                if ($('#tablaProductos tbody tr').length == 0){
+                    window.location.href = '/carrito/';
+                }
+
+            } else {
+                alert('Falló la eliminación del producto');
+            }
+        },
+        error: function (XMLHttpRequest, text, error) { ; alert(XMLHttpRequest.responseText); },
+        failure: function (response) { alert(response); }
+    });
+}
+
+function actualizarPrecio(){
+    var total = 0;
+
+   $('.precioProducto').each(function() {
+        var precio = parseInt($(this).text());
+        var cantidad = parseInt($(this).parent().find('.cantidadProducto').val());
+        total = total + (precio * cantidad);
+    });
+    $('#textototal').text("Total: $"+total);
+
+}
+
 function agregarAlCarrito(idProducto){
     var fd = new FormData();
     fd.append("idproducto", idProducto);

@@ -73,6 +73,7 @@
     <script>
         $(document).ready(function() {
             crearnavbar();
+            actualizarPrecio();
         });
     </script>
 </head>
@@ -82,11 +83,20 @@
         <div id="navbarSuperior"></div>
         <div id="navbarInferior"></div>
     </header>
+    {% if not productos %}
 
     <div class="container-full">
         <div class="cart-form">
             <h2>Carrito de Compras</h2>
-            <table>
+            <h3>No hay productos en el carrito</h3>
+        </div>
+    </div>
+    
+        {% else %}
+    <div class="container-full">
+        <div class="cart-form">
+            <h2>Carrito de Compras</h2>
+            <table id="tablaProductos">
                 <thead>
                     <tr>
                         <th>Imagen</th>
@@ -94,16 +104,32 @@
                         <th>Precio</th>
                         <th>Cantidad</th>
                         <th>Stock</th>
+                        <th>Eliminar</th>
                     </tr>
                 </thead>
                 <tbody>
+                    {% for producto in productos %}
+
+                    <tr>
+                        <td><img src="{% static 'img/imagenesProducto/' %}{{ producto.imagen }}" alt="{{ producto.nombre }}" class="product-img"></td>     
+                        <td class="idProducto" value="{{ producto.IdProducto }}">{{ producto.nombre }}</td>
+                        <td class="precioProducto">{{ producto.precio }}</td>
+                        <td><input onblur="actualizarPrecio();" class="cantidadProducto" type="number" value="1" min="1" max="{{ producto.stock }}"></td>
+                        <td>{{ producto.stock }}</td>
+                        <td>
+                            <button type="button" class="btn btn-primary" onclick="EliminarProductoCarrito(this)">Eliminar</button>
+                        </td>
+                    </tr>
+                        
+                    {% endfor %}
                     
                 </tbody>
             </table>
-            <h1 id="textototal">total =</h1>
-            <button type="button" class="btn btn-primary">Proceder al Pago</button>
+            <h1 id="textototal"></h1>
+            <button type="button" class="btn btn-primary" onclick="comprarProductos();">Proceder al Pago</button>
         </div>
     </div>
+    {% endif %}
 
     <footer>
         <div class="container-fluid footer">

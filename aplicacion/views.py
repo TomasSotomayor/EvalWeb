@@ -10,9 +10,44 @@ from .forms import TipoUsuarioForm,TipoProductoForm,UsuarioForm
 
 import os
 
-def carrito(request):
-    return render(request, 'aplicacion/carrito.html')
 
+
+def eliminarproductocarrito(request):
+    if request.method == 'POST':
+        try:
+            idproducto = request.POST.get('idproducto')
+            carro = request.session.get('carro', {})
+            if idproducto in carro['productos']:
+                carro['productos'].pop(idproducto, None)
+                request.session['carro'] = carro
+                return JsonResponse({'estado': 'completado'})
+            else:
+                return JsonResponse({'error': 'El Producto no esta en el carro'})
+        except Exception as e:
+            return JsonResponse({
+                'Excepciones': {
+                    'message': str(e),  # Mensaje de la excepción
+                    'type': type(e).__name,  # Tipo de la excepción
+                    'details': traceback.format_exc()  # Detalles de la excepción
+                    }
+            })
+    else:
+        return JsonResponse({'estado': 'fallido'})
+
+
+def carrito(request):
+
+    carro = request.session.get('carro', {})
+    if carro == {} or carro['productos'] == {}:
+        return render(request, 'aplicacion/carrito.html' , {'productos': [], 'total': 0})
+    else:
+        productos = []
+        for idProducto in carro['productos']:
+            producto = Producto.objects.get(IdProducto=idProducto)
+            productos.append(producto)
+        total = sum(producto.precio for producto in productos)
+        return render(request, 'aplicacion/carrito.html' , {'productos': productos , 'total': total})
+        
 
 
 def administrar(request):

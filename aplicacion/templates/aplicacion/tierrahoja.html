@@ -76,11 +76,20 @@
     <div class="row">
         <!-- Primera fila -->
         {% for producto in productos %}
-        <div class="col-md-4">
+        {% if producto.descuento == 0 %}
+            <div class="col-md-4">
+                <img src="{% static 'img/ImagenesProducto/' %}{{ producto.imagen }}" class="img-fluid" alt="Imagen 1">
+                <h3>{{ producto.nombre }} ${{ producto.precio }}</h3>
+                <button class="btn btn-success" onclick="agregarAlCarrito({{producto.IdProducto}})">Comprar</button>
+            </div>
+        {% else %}
+        <div class="col-md-4" style="margin-bottom: 1%;">
             <img src="{% static 'img/ImagenesProducto/' %}{{ producto.imagen }}" class="img-fluid" alt="Imagen 1">
-            <h3>{{ producto.nombre }} ${{ producto.precio }}</h3>
+            <h3>{{ producto.nombre }}  Precio Original: ${{ producto.precio }}  Precio con descuento: ${{ producto.precio_descuento }}</h3>
+            <h4>Descuento: {{ producto.descuento }}%</h4>
             <button class="btn btn-success" onclick="agregarAlCarrito({{producto.IdProducto}})">Comprar</button>
         </div>
+        {% endif %}
         {% endfor %}
     </div>
 </div>

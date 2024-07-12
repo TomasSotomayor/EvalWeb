@@ -46,26 +46,29 @@
     </div>
 
     <div class="container mt-5">
-        <h1 class="text-center">Usuarios</h1>
+        <h1 class="text-center">Suscripciones</h1>
         <div class="card mt-4">
             <div class="card-body">
                 <table class="table">
                     <thead>
                         <tr>
                             <th>ID</th>
-                            <th>Nombre</th>
-                            <th>Email</th>
-                            <th>Acciones</th>
+                            <th>Usuario</th>
+                            <th>Fecha inicio</th>
+                            <th>Fecha fin</th>
+                            <th>Eliminar</th>
                         </tr>
                     </thead>
                     <tbody>
-                        {% for usuario in usuarios %}
+                        <!-- # para cada suscripcion dentro de suscripciones -->
+                        {% for suscripcion in suscripciones %} 
                         <tr>
-                            <td>{{ usuario.IdUsuario }}</td>
-                            <td>{{ usuario.nombre }}</td>
-                            <td>{{ usuario.email }}</td>
+                            <td>{{ suscripcion.IdSuscripcion}}</td>
+                            <td>{{ suscripcion.usuario.nombre}}</td>
+                            <td>{{ suscripcion.fecha_inicio }}</td>
+                            <td>{{ suscripcion.fecha_fin }}</td>
                             <td>
-                                <a href="{% url 'eliminar_usuario' usuario.IdUsuario %}" class="btn btn-sm btn-danger">Eliminar</a>
+                                <a href="{% url 'eliminar_suscripcion' suscripcion.IdSuscripcion %}" class="btn btn-sm btn-danger">Eliminar</a>
                             </td>
                         </tr>
                         {% endfor %}

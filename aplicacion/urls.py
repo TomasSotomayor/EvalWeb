@@ -30,7 +30,7 @@ urlpatterns = [
     path('eliminar_promocion//<int:pk>/', views.eliminar_promocion, name='eliminar_promocion'),
     path('editar_promocion/<int:pk>/', views.editar_promocion, name='editar_promocion'),
     path('agregarSuscripcion/', views.agregarSuscripcion, name='agregarSuscripcion'),
-
+    path('eliminar_suscripcion//<int:pk>/', views.eliminar_suscripcion, name='eliminar_suscripcion'),
 
     path('mantenedorUsuarios/lista-usuarios/', views.lista_usuarios, name='lista_usuarios'),
     path('editar-usuario/<int:pk>/', views.editar_usuario, name='editar_usuario'),

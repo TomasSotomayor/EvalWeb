@@ -1,0 +1,15 @@
+{% block content %}
+<div class="container mt-5">
+    <h1 class="text-center">Confirmar Eliminar</h1>
+    <div class="card mt-4">
+        <div class="card-body">
+            <p>¿Estás seguro que deseas eliminar la suscripcion del usuario "{{ suscripcion.usuario.nombre }}"?</p>
+            <form method="POST">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-danger">Eliminar</button>
+                <a href="../../../mantenedorSuscripcion" class="btn btn-secondary">Cancelar</a>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

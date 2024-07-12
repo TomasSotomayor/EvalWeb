@@ -118,7 +118,7 @@ def mantenedorPromocion(request):
                 FROM aplicacion_promocion p
                 LEFT JOIN aplicacion_producto pr ON p.id_producto_id = pr.IdProducto
             '''
-)
+            )
 
     promociones_dict = []
     for promocion in promociones:
@@ -225,7 +225,12 @@ def agregaralcarro(request):
     else:
             return JsonResponse({'estado': 'fallido'})
 
-
+def eliminar_suscripcion(request, pk):
+    suscripcion = get_object_or_404(Suscripcion,IdSuscripcion=pk)
+    if request.method == 'POST':
+        suscripcion.delete()
+        return redirect('../../../administrar/mantenedorSuscripcion/')
+    return render(request, 'aplicacion/confirma_eliminarSuscripcion.html', {'suscripcion': suscripcion})
 
 
 def eliminar_promocion(request, pk):
@@ -243,7 +248,11 @@ def agregarPromocion(request):
             producto_id = request.POST.get('producto')
             descuento = request.POST.get('descuento')
 
+    
             producto = Producto.objects.get(IdProducto=producto_id)
+            existe_promocion = Promocion.objects.filter(id_producto=producto).exists()
+            if existe_promocion:
+                return JsonResponse({'estado': 'fallido', 'error': 'Ya existe una promoción para este producto.'})
             promocion = Promocion(descripcion=descripcion, id_producto=producto, descuento=descuento)
             promocion.save()
             return JsonResponse({'estado': 'completado'})

@@ -10,82 +10,83 @@ from datetime import datetime, timedelta
 from .forms import TipoUsuarioForm,TipoProductoForm,UsuarioForm,PromocionForm
 
 import os
-
-
-
-def eliminarproductocarrito(request):
-    if request.method == 'POST':
-        try:
-            idproducto = request.POST.get('idproducto')
-            carro = request.session.get('carro', {})
-            if idproducto in carro['productos']:
-                carro['productos'].pop(idproducto, None)
-                request.session['carro'] = carro
-                return JsonResponse({'estado': 'completado'})
-            else:
-                return JsonResponse({'error': 'El Producto no esta en el carro'})
-        except Exception as e:
-            return JsonResponse({
-                'Excepciones': {
-                    'message': str(e),  # Mensaje de la excepción
-                    'type': type(e).__name,  # Tipo de la excepción
-                    'details': traceback.format_exc()  # Detalles de la excepción
-                    }
-            })
-    else:
-        return JsonResponse({'estado': 'fallido'})
-
-
-def carrito(request):
-
-    carro = request.session.get('carro', {})
-    if carro == {} or carro['productos'] == {}:
-        return render(request, 'aplicacion/carrito.html' , {'productos': [], 'total': 0})
-    else:
-        productos = []
-        for idProducto in carro['productos']:
-            producto = Producto.objects.get(IdProducto=idProducto)
-            productos.append(producto)
-        total = sum(producto.precio for producto in productos)
-        return render(request, 'aplicacion/carrito.html' , {'productos': productos , 'total': total})
         
 
 
 def administrar(request):
-    return render(request, 'aplicacion/admin.html')
-     
-     
+    return render(request, 'aplicacion/admin.html')   
 
 def arbustos(request):
-    productos = Producto.objects.raw('SELECT * FROM aplicacion_producto WHERE tipo_producto_id = %s', [12])
-    return render(request, 'aplicacion/arbustos.html',{'productos': productos})
-
+    productos = Producto.objects.raw('''
+                SELECT p.*, pr.descuento as descuento, pr.id_promocion as promocion_id
+                FROM aplicacion_producto p
+                LEFT JOIN aplicacion_promocion pr ON p.IdProducto = pr.id_producto_id
+                WHERE tipo_producto_id = %s ''' , [12])
+    productos_dict = []
+    for producto in productos:
+                producto_dict = model_to_dict(producto)
+                producto_dict['id_promocion'] = producto.promocion_id if producto.promocion_id else None
+                producto_dict['descuento'] = producto.descuento if producto.descuento else 0
+                producto_dict['precio_descuento'] = producto.precio - (producto.precio * producto_dict['descuento'] / 100)
+                productos_dict.append(producto_dict)
+    return render(request, 'aplicacion/arbustos.html',{'productos': productos_dict})
 
 def contacto(request):
     return render(request, 'aplicacion/contacto.html')
 
 def flores(request):
-    productos = Producto.objects.raw('SELECT * FROM aplicacion_producto WHERE tipo_producto_id = %s', [10])
-    return render(request, 'aplicacion/flores.html',{'productos': productos})
+    productos = Producto.objects.raw('''
+                SELECT p.*, pr.descuento as descuento, pr.id_promocion as promocion_id
+                FROM aplicacion_producto p
+                LEFT JOIN aplicacion_promocion pr ON p.IdProducto = pr.id_producto_id
+                WHERE tipo_producto_id = %s ''' , [10])
+    productos_dict = []
+    for producto in productos:
+                producto_dict = model_to_dict(producto)
+                producto_dict['id_promocion'] = producto.promocion_id if producto.promocion_id else None
+                producto_dict['descuento'] = producto.descuento if producto.descuento else 0
+                producto_dict['precio_descuento'] = producto.precio - (producto.precio * producto_dict['descuento'] / 100)
+                productos_dict.append(producto_dict)
+    return render(request, 'aplicacion/flores.html',{'productos': productos_dict})
 
 def index(request):
     return render(request, 'aplicacion/index.html')
 
 def enviarcontacto(request):
-
-    
     return render(request, 'aplicacion/index.html')
 
 def maceteros(request):
-    productos = Producto.objects.raw('SELECT * FROM aplicacion_producto WHERE tipo_producto_id = %s', [9])
-    return render(request, 'aplicacion/maceteros.html',{'productos': productos})
+    productos = Producto.objects.raw('''
+                SELECT p.*, pr.descuento as descuento, pr.id_promocion as promocion_id
+                FROM aplicacion_producto p
+                LEFT JOIN aplicacion_promocion pr ON p.IdProducto = pr.id_producto_id
+                WHERE tipo_producto_id = %s ''' , [9])
+    productos_dict = []
+    for producto in productos:
+                producto_dict = model_to_dict(producto)
+                producto_dict['id_promocion'] = producto.promocion_id if producto.promocion_id else None
+                producto_dict['descuento'] = producto.descuento if producto.descuento else 0
+                producto_dict['precio_descuento'] = producto.precio - (producto.precio * producto_dict['descuento'] / 100)
+                productos_dict.append(producto_dict)
+    return render(request, 'aplicacion/maceteros.html',{'productos': productos_dict})
 
 def registro(request):
     return render(request, 'aplicacion/registro.html')
 
 def tierrahoja(request):
-    productos = Producto.objects.raw('SELECT * FROM aplicacion_producto WHERE tipo_producto_id = %s', [11])
-    return render(request, 'aplicacion/tierrahoja.html',{'productos': productos})
+    productos = Producto.objects.raw('''
+                SELECT p.*, pr.descuento as descuento, pr.id_promocion as promocion_id
+                FROM aplicacion_producto p
+                LEFT JOIN aplicacion_promocion pr ON p.IdProducto = pr.id_producto_id
+                WHERE tipo_producto_id = %s ''' , [11])
+    productos_dict = []
+    for producto in productos:
+                producto_dict = model_to_dict(producto)
+                producto_dict['id_promocion'] = producto.promocion_id if producto.promocion_id else None
+                producto_dict['descuento'] = producto.descuento if producto.descuento else 0
+                producto_dict['precio_descuento'] = producto.precio - (producto.precio * producto_dict['descuento'] / 100)
+                productos_dict.append(producto_dict)
+    return render(request, 'aplicacion/tierrahoja.html',{'productos': productos_dict})
 
 def mantenedorUsuarios(request):
     usuarios = Usuario.objects.all()
@@ -127,6 +128,43 @@ def mantenedorPromocion(request):
                 promociones_dict.append(promocion_dict)
     return render(request, 'aplicacion/promocion.html', {'productos': producto, 'promociones': promociones_dict})
 
+
+
+def eliminarproductocarrito(request):
+    if request.method == 'POST':
+        try:
+            idproducto = request.POST.get('idproducto')
+            carro = request.session.get('carro', {})
+            if idproducto in carro['productos']:
+                carro['productos'].pop(idproducto, None)
+                request.session['carro'] = carro
+                return JsonResponse({'estado': 'completado'})
+            else:
+                return JsonResponse({'error': 'El Producto no esta en el carro'})
+        except Exception as e:
+            return JsonResponse({
+                'Excepciones': {
+                    'message': str(e),  # Mensaje de la excepción
+                    'type': type(e).__name,  # Tipo de la excepción
+                    'details': traceback.format_exc()  # Detalles de la excepción
+                    }
+            })
+    else:
+        return JsonResponse({'estado': 'fallido'})
+
+
+def carrito(request):
+
+    carro = request.session.get('carro', {})
+    if carro == {} or carro['productos'] == {}:
+        return render(request, 'aplicacion/carrito.html' , {'productos': [], 'total': 0})
+    else:
+        productos = []
+        for idProducto in carro['productos']:
+            producto = Producto.objects.get(IdProducto=idProducto)
+            productos.append(producto)
+        total = sum(producto.precio for producto in productos)
+        return render(request, 'aplicacion/carrito.html' , {'productos': productos , 'total': total})
 
 def editar_promocion(request, pk):
     promocion = get_object_or_404(Promocion, id_promocion=pk)

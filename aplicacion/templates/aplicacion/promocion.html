@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Descuentos</title>
+    <title>Promociones</title>
     <link rel="stylesheet" href="{% static 'css/style.css' %}">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
@@ -14,7 +14,7 @@
 </head>
 <body>
     <div class="container mt-5">
-        <h1 class="text-center">Descuentos</h1>
+        <h1 class="text-center">Promociones</h1>
         <div class="card mt-4">
             <div class="card-body">
                 <form>
@@ -29,8 +29,8 @@
                     </div>
                     
                     <div class="form-group">
-                        <label for="descuento">Descuento (%)</label>
-                        <input type="number" class="form-control" id="descuento" placeholder="Descuento">
+                        <label for="descuento">Porcentaje de descuento</label>
+                        <input type="number" class="form-control" id="descuento" placeholder="10 / 20 / 30 / etc">
                     </div>
                     
                     <div class="form-group">
@@ -38,7 +38,7 @@
                         <textarea class="form-control" id="descripcion" placeholder="Descripción"></textarea>
                     </div>
                    
-                    <button type="button" class="btn btn-primary" onclick="agregarDescuento();">Guardar descuento</button>
+                    <button type="button" class="btn btn-primary" onclick="agregarPromocion();">Guardar promocion</button>
                     <a href=".." class="btn btn-sm btn-primary">Salir</a>
                 </form>
             </div>
@@ -60,14 +60,15 @@
                         </tr>
                     </thead>
                     <tbody>
-                        {% for descuento in descuentos %}
+                        {% for promocion in promociones %}
                         <tr>
-                            <td>{{ descuento.IdDescuento }}</td>
-                            <td>{{ descuento.producto.nombre }}</td>
-                            <td>{{ descuento.descuento }}</td>
-                            <td>{{ descuento.descripcion }}</td>
+                            <td>{{ promocion.id_promocion }}</td>
+                            <td>{{ promocion.producto_nombre }}</td>
+                            <td>{{ promocion.descuento }}</td>
+                            <td>{{ promocion.descripcion }}</td>
                             <td>
-                                <a href="{% url 'eliminar_descuento' descuento.IdDescuento %}" class="btn btn-sm btn-danger">Eliminar</a>
+                                <a href="{% url 'editar_promocion' promocion.id_promocion %}" class="btn btn-sm btn-primary">Editar</a>
+                                <a href="{% url 'eliminar_promocion' promocion.id_promocion %}" class="btn btn-sm btn-danger">Eliminar</a>
                             </td>
                         </tr>
                         {% endfor %}

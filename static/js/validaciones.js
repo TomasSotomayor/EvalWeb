@@ -277,6 +277,119 @@ function iniciarsesion(){
 
 }
 
+
+function agregarPromocion(){
+    var descripcion = $('#descripcion').val();
+    var descuento = $('#descuento').val();
+    var producto = $('#cmbProducto').val();
+    var msg = '';
+    if (descripcion === '' || descuento === '' || producto == '0') {
+        msg = msg + '\nPor favor, rellene todos los campos.';
+    }
+    if (isNaN(parseInt(descuento)) || parseInt(descuento) <= 0 || parseInt(descuento) > 100) {
+        msg = msg + '\nPor favor, introduzca un descuento valido.';
+    }
+    if (msg != '') {
+        alert(msg);
+        return;
+    }
+    var fd = new FormData();
+    fd.append("descripcion", descripcion);
+    fd.append("descuento", descuento);
+    fd.append("producto", producto);
+    $.ajax({
+        type: "POST",
+        url: "/agregarPromocion/",
+        data: fd,
+        contentType: false,
+        processData: false,
+        headers: { "X-CSRFToken": getCookie("csrftoken") },
+        success: function (response) {
+            console.log(response);
+            if (response.Excepciones != null) {
+                alert('Ha ocurrido un error inesperado');
+                console.log(response.Excepciones.message + '\n' + response.Excepciones.type + '\n' + response.Excepciones.details);
+                return;
+            }
+            if (response.error != null) {
+                alert(response.error);
+                return;
+            }
+            if(response.estado === 'completado') {
+                alert('Promoción agregada exitosamente');
+                window.location.href = '/administrar/mantenedorPromocion/';
+            }
+            if (response.estado === 'fallido') {
+                alert('No se pudo agregar la promoción');
+                window.location.href = '/administrar/mantenedorPromocion/';
+            }
+
+        },
+        error: function (XMLHttpRequest, text, error) { ; alert(XMLHttpRequest.responseText); },
+        failure: function (response) { alert(response); }
+    });
+
+}
+    
+function agregarSuscripcion(){
+    var usuario = $('#cmbUsuario').val();
+    var fechaInicio = $('#fecha_inicio').val();
+    var fechaTermino = $('#fecha_fin').val();
+    var msg = '';
+
+    if (usuario == '0' || fechaInicio === '' || fechaTermino === '') {
+        msg = msg + '\nPor favor, rellene todos los campos.';
+    }
+    if (fechaInicio > fechaTermino) {
+        msg = msg + '\nLa fecha de inicio no puede ser mayor a la fecha de término.';
+    }
+    var fd = new FormData();
+    fd.append("usuario", usuario);
+    fd.append("fechaInicio", fechaInicio);
+    fd.append("fechaTermino", fechaTermino);
+    if (msg != '') {
+        alert(msg);
+        return;
+    }
+    $.ajax({
+        type: "POST",
+        url: "/agregarSuscripcion/",
+        data: fd,
+        contentType: false,
+        processData: false,
+        headers: { "X-CSRFToken": getCookie("csrftoken") },
+        success: function (response) {
+            console.log(response);
+            if (response.Excepciones != null) {
+                alert('Ha ocurrido un error inesperado');
+                console.log(response.Excepciones.message + '\n' + response.Excepciones.type + '\n' + response.Excepciones.details);
+                return;
+            }
+            if (response.error != null) {
+                alert(response.error);
+                return;
+            }
+            if(response.estado === 'completado') {
+                alert('Suscripción agregada exitosamente');
+
+                window.location.href = '/administrar/mantenedorSuscripcion/';
+            }
+            if (response.estado === 'fallido') {
+                alert('No se pudo agregar la suscripción');
+                window.location.href = '/administrar/mantenedorSuscripcion/';
+            }
+
+        },
+        error: function (XMLHttpRequest, text, error) { ; alert(XMLHttpRequest.responseText); },
+        failure: function (response) { alert(response); }
+    });
+
+}
+
+
+
+
+
 function agregarUsuario(){
     nombre = $('#nombre').val();
     correo = $('#email').val();

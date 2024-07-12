@@ -21,10 +21,15 @@ urlpatterns = [
     path('administrar/mantenedorProductos/', views.mantenedorProductos, name='mantenedorProductos'),
     path('administrar/mantenedorTipoUsuario/', views.mantenedorTipoUsuario, name='mantenedorTipoUsuario'),
     path('administrar/mantenedorTipoProducto/', views.mantenedorTipoProducto, name='mantenedorTipoProducto'),
+    path('administrar/mantenedorSuscripcion/', views.mantenedorSuscripcion, name='mantenedorSuscripcion'),
+    path('administrar/mantenedorPromocion/', views.mantenedorPromocion, name='mantenedorPromocion'),
     path('BuscarProductoEditar/', views.BuscarProductoEditar, name='BuscarProductoEditar'),
     path('ConfirmarEditarProducto/', views.ConfirmarEditarProducto, name='ConfirmarEditarProducto'),
-
+    path('agregarPromocion/', views.agregarPromocion, name='agregarPromocion'),
     path('GrabarProducto/', views.GrabarProducto, name='GrabarProducto'),
+    path('eliminar_promocion//<int:pk>/', views.eliminar_promocion, name='eliminar_promocion'),
+    path('editar_promocion/<int:pk>/', views.editar_promocion, name='editar_promocion'),
+    path('agregarSuscripcion/', views.agregarSuscripcion, name='agregarSuscripcion'),
 
 
     path('mantenedorUsuarios/lista-usuarios/', views.lista_usuarios, name='lista_usuarios'),

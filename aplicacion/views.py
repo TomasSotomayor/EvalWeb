@@ -1,12 +1,13 @@
 # aplicacion/views.py
 from django.shortcuts import render,get_object_or_404,redirect
 from django.http import JsonResponse
-from .models import Usuario, TipoUsuario, TipoProducto, Producto, Compra,Suscripcion,DetalleCompra
+from .models import Usuario, TipoUsuario, TipoProducto, Producto, Compra,Suscripcion,DetalleCompra,Promocion
 import traceback
 from django.forms.models import model_to_dict
 from django.core.files.storage import FileSystemStorage
 from uuid import uuid4
-from .forms import TipoUsuarioForm,TipoProductoForm,UsuarioForm
+from datetime import datetime, timedelta
+from .forms import TipoUsuarioForm,TipoProductoForm,UsuarioForm,PromocionForm
 
 import os
 
@@ -104,6 +105,94 @@ def mantenedorTipoUsuario(request):
     tipos_usuarios = TipoUsuario.objects.all() 
     return render(request, 'aplicacion/tipousuario.html', {'tipos_usuarios': tipos_usuarios})
 
+def mantenedorSuscripcion(request):
+    usuario = Usuario.objects.all()
+    suscripciones = Suscripcion.objects.all()
+    return render(request, 'aplicacion/suscripcion.html', {'suscripciones': suscripciones, 'usuarios': usuario})
+
+
+def mantenedorPromocion(request):
+    producto = Producto.objects.all()
+    promociones = Promocion.objects.raw('''
+                SELECT p.*, pr.nombre as producto_nombre
+                FROM aplicacion_promocion p
+                LEFT JOIN aplicacion_producto pr ON p.id_producto_id = pr.IdProducto
+            '''
+)
+
+    promociones_dict = []
+    for promocion in promociones:
+                promocion_dict = model_to_dict(promocion)
+                promocion_dict['producto_nombre'] = promocion.producto_nombre
+                promociones_dict.append(promocion_dict)
+    return render(request, 'aplicacion/promocion.html', {'productos': producto, 'promociones': promociones_dict})
+
+
+def editar_promocion(request, pk):
+    promocion = get_object_or_404(Promocion, id_promocion=pk)
+    if request.method == 'POST':
+        form = PromocionForm(request.POST, instance=promocion)
+        if form.is_valid():
+            form.save()
+            return redirect('../../administrar/mantenedorPromocion/')
+    else:
+        form = PromocionForm(instance=promocion)
+    return render(request, 'aplicacion/editar_promocion.html', {'form': form})
+
+
+def agregarSuscripcion(request):
+    if request.method == 'POST':
+        try:
+            id_usuario = request.POST.get('usuario')
+            fecha_inicio_suscripcion = request.POST.get('fechaInicio')
+            fecha_fin_suscripcion = request.POST.get('fechaTermino')
+
+            fecha_inicio_nueva = datetime.strptime(fecha_inicio_suscripcion, "%Y-%m-%d").date()
+            fecha_fin_nueva = datetime.strptime(fecha_fin_suscripcion, "%Y-%m-%d").date()
+
+
+            usuario = get_object_or_404(Usuario, pk=id_usuario)
+
+            raw_query = """
+            SELECT * FROM aplicacion_suscripcion
+            WHERE usuario_id = %s
+            AND (
+                (fecha_inicio <= %s AND fecha_fin >= %s)
+                OR
+                (fecha_inicio <= %s AND fecha_fin >= %s)
+                OR
+                (%s between fecha_inicio AND fecha_fin)
+                OR
+                (%s between fecha_inicio AND fecha_fin)
+                OR
+                (fecha_inicio = %s)
+            )
+            """
+            suscripciones_existentes = Suscripcion.objects.raw(raw_query, [id_usuario, fecha_fin_nueva, fecha_inicio_nueva, fecha_fin_nueva, fecha_inicio_nueva, fecha_inicio_nueva, fecha_fin_nueva,fecha_fin_nueva])
+
+            # Verificar si hay resultados
+            if len(list(suscripciones_existentes)) > 0:
+                return JsonResponse({'estado': 'fallido', 'error': 'Ya existe una suscripción activa en ese rango de fechas para este usuario.'})
+
+
+            suscripcion = Suscripcion(usuario=usuario, fecha_inicio=fecha_inicio_nueva, fecha_fin=fecha_fin_nueva)
+            suscripcion.save()
+            return JsonResponse({'estado': 'completado'})
+
+        except Exception as e:
+            return JsonResponse({
+                'Excepciones': {
+                    'message': str(e),  # Mensaje de la excepción
+                    'type': type(e).__name,  # Tipo de la excepción
+                    'details': traceback.format_exc()  # Detalles de la excepción
+                }
+            })
+    else:
+        return JsonResponse({'estado': 'fallido'})
+    
+
+
+
 # Agregar al carro
 def agregaralcarro(request):
     if request.method == 'POST':
@@ -139,10 +228,35 @@ def agregaralcarro(request):
 
 
 
+def eliminar_promocion(request, pk):
+    promocion = get_object_or_404(Promocion, id_promocion=pk)
+    if request.method == 'POST':
+        promocion.delete()
+        return redirect('../../../administrar/mantenedorPromocion/')
+    return render(request, 'aplicacion/confirma_eliminarPromocion.html', {'promocion': promocion})
 
 
+def agregarPromocion(request):
+    if request.method == 'POST':
+        try:
+            descripcion = request.POST.get('descripcion')
+            producto_id = request.POST.get('producto')
+            descuento = request.POST.get('descuento')
 
-
+            producto = Producto.objects.get(IdProducto=producto_id)
+            promocion = Promocion(descripcion=descripcion, id_producto=producto, descuento=descuento)
+            promocion.save()
+            return JsonResponse({'estado': 'completado'})
+        except Exception as e:
+            return JsonResponse({
+                'Excepciones': {
+                    'message': str(e),  # Mensaje de la excepción
+                    'type': type(e).__name,  # Tipo de la excepción
+                    'details': traceback.format_exc()  # Detalles de la excepción
+                }
+            })
+    else:
+        return JsonResponse({'estado': 'fallido'})
 
 #iniciar sesion
 def iniciarsesion(request):

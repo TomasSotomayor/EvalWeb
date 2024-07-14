@@ -50,6 +50,8 @@ $(document).ready(function(){
     });
 });
 
+var GL_SESION_VALIDA = 0;
+
 
 function EliminarProductoCarrito(Obj){
     var idProducto = $(Obj).parent().parent().find('.idProducto').attr('value');
@@ -105,7 +107,12 @@ function actualizarPrecio(){
 function agregarAlCarrito(idProducto){
     var fd = new FormData();
     fd.append("idproducto", idProducto);
+    if (GL_SESION_VALIDA==0) {
 
+        alert('Debe iniciar sesion');
+        return;
+
+    }
 
     console.log('entre');
     $.ajax({
@@ -145,7 +152,8 @@ function agregarAlCarrito(idProducto){
 }
 
 function crearnavbar(){
-    const navbarSuperior = `
+    if (GL_SESION_VALIDA == 1) {
+    var navbarSuperior = `
 <nav class="navbar navbar-expand-lg navbar-taller">
     <div class="container-fluid">
         <div class="navbar-header">
@@ -161,34 +169,17 @@ function crearnavbar(){
             <!-- Menú de navegación y botones -->
             <ul class="navbar-nav d-flex align-items-center">
                 <li class="nav-item">
-                    <a href="/registro/"
+                    <a onclick="cerrarSesion();"
                        class="btn"
-                       style="background-color: #70bc34; color: rgb(255, 246, 216); margin-right: 10px;">Regístrate</a>
+                       style="background-color: #70bc34; color: rgb(255, 246, 216); margin-right: 10px;">Cerrar Sesion</a>
                 </li>
-                <li class="nav-item dropdown">
-                    <a class="btn dropdown-toggle"
-                       style="background-color: #70bc34; color: rgb(255, 246, 216); margin-right: 10px;"
-                       id="loginDropdown" role="button" data-toggle="dropdown" aria-haspopup="true"
-                       aria-expanded="false">Iniciar Sesión</a>
-                    <div class="dropdown-menu dropdown-menu-right p-3" aria-labelledby="loginDropdown" style="z-index: 2;">
-                        <form class="form" method="post" action="iniciarsesion">
-                        <div class="row">
-                            <div class="form-group">
-                                <label for="username">Usuario</label>
-                                <input type="text" class="form-control" id="username"
-                                       placeholder="Usuario">
-                            </div>
-                            <div class="form-group">
-                                <label for="password">Contraseña</label>
-                                <input type="password" class="form-control" id="password"
-                                       placeholder="Contraseña">
-                            </div>
-                            <button type="button" onclick="iniciarsesion();" class="btn btn-primary">Iniciar Sesión</button>
-                            <button type="button" onclick="UsuarioAdmin();" class="btn btn-primary">Usuario Admin</button>
-                        </div>
-                        </form>
-                    </div>
+                <li class="nav-item">
+                    <a href="/miperfil/"
+                          class="btn"
+                            style="background-color: #70bc34; color: rgb(255, 246, 216); margin-right: 10px;">Mi Perfil</a>
                 </li>
+                
+               
                 <li class="nav-item">
                     <a href="/"
                        class="btn"
@@ -205,7 +196,7 @@ function crearnavbar(){
         </div>
     </div>
 </nav>`;
-const navbarInferior = `
+var navbarInferior = `
 <nav class="navbar navbar-expand-lg navbar-taller" style="z-index: 1;">
     <div class="container d-flex justify-content-between">
         <a href="/arbustos/" class="btn1" style="background-color: #70bc34; color: rgb(255, 246, 216);">Arbustos</a>
@@ -217,10 +208,131 @@ const navbarInferior = `
 </nav>`;
     $('#navbarSuperior').html(navbarSuperior);
     $('#navbarInferior').html(navbarInferior);
+    }
+    if (GL_SESION_VALIDA == 0) {
+        var navbarSuperior = `
+        <nav class="navbar navbar-expand-lg navbar-taller">
+            <div class="container-fluid">
+                <div class="navbar-header">
+                    <a class="navbar-brand" href="/">
+                        <img src="../../static/img/logo/logo.png" style="max-width:100%;height:auto;" alt="Logo" width="100">
+                    </a>
+                </div>
+                <div class="d-flex ml-auto align-items-center">
+                    <div class="search-bar d-flex align-items-center mr-4">
+                        <input type="text" placeholder="Buscar..." class="form-control">
+                        <button type="submit" class="btn btn-primary ml-2">Buscar</button>
+                    </div>
+                    <!-- Menú de navegación y botones -->
+                    <ul class="navbar-nav d-flex align-items-center">
+                        <li class="nav-item">
+                            <a href="/registro/"
+                               class="btn"
+                               style="background-color: #70bc34; color: rgb(255, 246, 216); margin-right: 10px;">Regístrate</a>
+                        </li>
+                        <li class="nav-item dropdown">
+                            <a class="btn dropdown-toggle"
+                               style="background-color: #70bc34; color: rgb(255, 246, 216); margin-right: 10px;"
+                               id="loginDropdown" role="button" data-toggle="dropdown" aria-haspopup="true"
+                               aria-expanded="false">Iniciar Sesión</a>
+                            <div class="dropdown-menu dropdown-menu-right p-3" aria-labelledby="loginDropdown" style="z-index: 2;">
+                                <form class="form" method="post" action="iniciarsesion">
+                                <div class="row">
+                                    <div class="form-group">
+                                        <label for="username">Usuario</label>
+                                        <input type="text" class="form-control" id="username"
+                                               placeholder="Usuario">
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="password">Contraseña</label>
+                                        <input type="password" class="form-control" id="password"
+                                               placeholder="Contraseña">
+                                    </div>
+                                    <button type="button" onclick="iniciarsesion();" class="btn btn-primary">Iniciar Sesión</button>
+                                    <button type="button" onclick="UsuarioAdmin();" class="btn btn-primary">Usuario Admin</button>
+                                </div>
+                                </form>
+                            </div>
+                        </li>
+                        <li class="nav-item">
+                            <a href="/"
+                               class="btn"
+                               style="background-color: #70bc34; color: rgb(255, 246, 216);">Volver Inicio</a>
+                        </li>
+                    </ul>
+                    <ul class="navbar-nav ml-auto">
+                        <li class="nav-item dropdown">
+                            <a class="btn btn-success ml-2"
+                            href="/carrito/"
+                                    style="background-color: #70bc34; color: rgb(255, 246, 216);">Carrito de Compras</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </nav>`;
+        
 
+
+        var navbarInferior = `
+<nav class="navbar navbar-expand-lg navbar-taller" style="z-index: 1;">
+    <div class="container d-flex justify-content-between">
+        <a href="/arbustos/" class="btn1" style="background-color: #70bc34; color: rgb(255, 246, 216);">Arbustos</a>
+        <a href="/tierrahoja/" class="btn1" style="background-color: #70bc34; color: rgb(255, 246, 216);">Tierra de hojas</a>
+        <a href="/flores/" class="btn1" style="background-color: #70bc34; color: rgb(255, 246, 216);">Flores</a>
+        <a href="/maceteros/" class="btn1" style="background-color: #70bc34; color: rgb(255, 246, 216);">Maceteros</a>
+        <a href="/contacto/" class="btn1" style="background-color: #70bc34; color: rgb(255, 246, 216);">Contacto</a>
+    </div>
+</nav>`;
+        $('#navbarSuperior').html(navbarSuperior);
+        $('#navbarInferior').html(navbarInferior); 
+        
+    }
 
     
 }
+
+function obtenerSesion(){
+    $.ajax({
+        type: "POST",
+        url: "/obtenersesion/",
+        contentType: false,
+        processData: false,
+        headers: { "X-CSRFToken": getCookie("csrftoken") },
+        success: function (response) {
+            console.log(response);
+            if (response.Excepciones != null) {
+                alert('Ha ocurrido un error inesperado');
+                console.log(response.Excepciones.message + '\n' + response.Excepciones.type + '\n' + response.Excepciones.details);
+                return;
+            }
+            if (response.error != null) {
+                alert(response.error);
+                return;
+            }
+            if(response.estado === 'completado' && response.tipousuario == null) {
+               console.log('entre tipo nulo');
+               GL_SESION_VALIDA = 0;
+               crearnavbar();
+
+            }
+            if(response.estado === 'completado' && response.tipousuario != null) {
+                console.log('entre tipo no nulo');
+                GL_SESION_VALIDA = 1;
+                crearnavbar();
+            }
+            if (response.estado === 'fallido') {
+                console.log('entre fallido');
+                GL_SESION_VALIDA = 0;
+                crearnavbar();
+            }
+            
+        },
+        error: function (XMLHttpRequest, text, error) { ; alert(XMLHttpRequest.responseText); },
+        failure: function (response) { alert(response); }
+    });
+
+}
+
 
 
 function iniciarsesion(){
@@ -728,4 +840,35 @@ function UsuarioAdmin(){
     $('#username').val('admin@admin.cl');
     $('#password').val('1234');
     iniciarsesion();
+}
+
+
+function cerrarSesion(){
+    $.ajax({
+        type: "POST",
+        url: "/cerrarsesion/",
+        contentType: false,
+        processData: false,
+        headers: { "X-CSRFToken": getCookie("csrftoken") },
+        success: function (response) {
+            console.log(response);
+            if (response.Excepciones != null) {
+                alert('Ha ocurrido un error inesperado');
+                console.log(response.Excepciones.message + '\n' + response.Excepciones.type + '\n' + response.Excepciones.details);
+                return;
+            }
+            if (response.error != null) {
+                alert(response.error);
+                return;
+            }
+            if(response.estado === 'completado') {
+                alert('Sesión cerrada con éxito');
+                window.location.href = '/';
+            } else {
+                alert('Falló el cierre de sesión');
+            }
+        },
+        error: function (XMLHttpRequest, text, error) { ; alert(XMLHttpRequest.responseText); },
+        failure: function (response) { alert(response); }
+    });
 }

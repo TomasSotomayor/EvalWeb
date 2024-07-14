@@ -14,9 +14,12 @@ import os
 def cerrarsesion(request):
     if request.method == 'POST':
         try:
-            del request.session['tipousuario']
-            del request.session['idUsuario']
-            del request.session['carro']
+            if 'tipousuario' in request.session:
+                del request.session['tipousuario']
+            if 'idUsuario' in request.session:
+                del request.session['idUsuario']
+            if 'carro' in request.session:
+                del request.session['carro']
             return JsonResponse({'estado': 'completado'})
         except Exception as e:
             return JsonResponse({
@@ -308,6 +311,27 @@ def agregarPromocion(request):
             promocion = Promocion(descripcion=descripcion, id_producto=producto, descuento=descuento)
             promocion.save()
             return JsonResponse({'estado': 'completado'})
+        except Exception as e:
+            return JsonResponse({
+                'Excepciones': {
+                    'message': str(e),  # Mensaje de la excepción
+                    'type': type(e).__name,  # Tipo de la excepción
+                    'details': traceback.format_exc()  # Detalles de la excepción
+                }
+            })
+    else:
+        return JsonResponse({'estado': 'fallido'})
+
+
+def obtenersesion(request):
+    if request.method == 'POST':
+        try:
+            tipousuario = request.session.get('tipousuario', None)
+            idUsuario = request.session.get('idUsuario', None)
+            if tipousuario:
+                return JsonResponse({'estado': 'completado', 'tipousuario': tipousuario, 'idUsuario': idUsuario})
+            else:
+                return JsonResponse({'estado': 'fallido'})
         except Exception as e:
             return JsonResponse({
                 'Excepciones': {

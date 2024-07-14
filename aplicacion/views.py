@@ -11,7 +11,21 @@ from .forms import TipoUsuarioForm,TipoProductoForm,UsuarioForm,PromocionForm
 
 import os
         
-
+def cerrarsesion(request):
+    if request.method == 'POST':
+        try:
+            del request.session['tipousuario']
+            del request.session['idUsuario']
+            del request.session['carro']
+            return JsonResponse({'estado': 'completado'})
+        except Exception as e:
+            return JsonResponse({
+                'Excepciones': {
+                    'message': str(e),  # Mensaje de la excepción
+                    'type': type(e).__name,  # Tipo de la excepción
+                    'details': traceback.format_exc()  # Detalles de la excepción
+                    }
+            })
 
 def administrar(request):
     return render(request, 'aplicacion/admin.html')   

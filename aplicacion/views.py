@@ -329,8 +329,8 @@ def iniciarsesion(request):
                 # Comprueba si existe un usuario con el correo y contraseña proporcionados
                 usuario = Usuario.objects.filter(email=correo, password=contrasena).first()
                 if usuario:
-                    # request.session['tipousuario'] = usuario.tipousuario.id_tipo_usuario
-                    # request.session['idUsuario'] = usuario.id_usuario
+                    request.session['tipousuario'] = usuario.tipo_usuario.IdTipoUsuario
+                    request.session['idUsuario'] = usuario.IdUsuario
                     return JsonResponse({'estado': 'completado', 'tipo_usuario': usuario.tipo_usuario.IdTipoUsuario})
                 else:
                     return JsonResponse({'error': 'Correo o contraseña incorrectos.'})

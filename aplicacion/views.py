@@ -8,9 +8,11 @@ from django.core.files.storage import FileSystemStorage
 from uuid import uuid4
 from datetime import datetime, timedelta
 from .forms import TipoUsuarioForm,TipoProductoForm,UsuarioForm,PromocionForm
+from django.views.decorators.csrf import csrf_exempt
 
 import os
         
+@csrf_exempt
 def cerrarsesion(request):
     if request.method == 'POST':
         try:
@@ -30,9 +32,11 @@ def cerrarsesion(request):
                     }
             })
 
+@csrf_exempt
 def administrar(request):
     return render(request, 'aplicacion/admin.html')   
 
+@csrf_exempt
 def arbustos(request):
     productos = Producto.objects.raw('''
                 SELECT p.*, pr.descuento as descuento, pr.id_promocion as promocion_id
@@ -48,9 +52,11 @@ def arbustos(request):
                 productos_dict.append(producto_dict)
     return render(request, 'aplicacion/arbustos.html',{'productos': productos_dict})
 
+@csrf_exempt
 def contacto(request):
     return render(request, 'aplicacion/contacto.html')
 
+@csrf_exempt
 def flores(request):
     productos = Producto.objects.raw('''
                 SELECT p.*, pr.descuento as descuento, pr.id_promocion as promocion_id
@@ -66,12 +72,15 @@ def flores(request):
                 productos_dict.append(producto_dict)
     return render(request, 'aplicacion/flores.html',{'productos': productos_dict})
 
+@csrf_exempt
 def index(request):
     return render(request, 'aplicacion/index.html')
 
+@csrf_exempt
 def enviarcontacto(request):
     return render(request, 'aplicacion/index.html')
 
+@csrf_exempt
 def maceteros(request):
     productos = Producto.objects.raw('''
                 SELECT p.*, pr.descuento as descuento, pr.id_promocion as promocion_id
@@ -87,9 +96,11 @@ def maceteros(request):
                 productos_dict.append(producto_dict)
     return render(request, 'aplicacion/maceteros.html',{'productos': productos_dict})
 
+@csrf_exempt
 def registro(request):
     return render(request, 'aplicacion/registro.html')
 
+@csrf_exempt
 def tierrahoja(request):
     productos = Producto.objects.raw('''
                 SELECT p.*, pr.descuento as descuento, pr.id_promocion as promocion_id
@@ -105,30 +116,35 @@ def tierrahoja(request):
                 productos_dict.append(producto_dict)
     return render(request, 'aplicacion/tierrahoja.html',{'productos': productos_dict})
 
+@csrf_exempt
 def mantenedorUsuarios(request):
     usuarios = Usuario.objects.all()
     tipos_usuarios = TipoUsuario.objects.all() 
     return render(request, 'aplicacion/usuario.html', {'usuarios': usuarios , 'tipos_usuarios': tipos_usuarios})
 
+@csrf_exempt
 def mantenedorTipoProducto(request):
     tipos_productos = TipoProducto.objects.all()  # Obtiene todos los objetos de TipoUsuario
     return render(request, 'aplicacion/tipoproducto.html', {'tipos_productos': tipos_productos})
 
+@csrf_exempt
 def mantenedorProductos(request):
     productos = Producto.objects.all()
     tipos_producto = TipoProducto.objects.all()
     return render(request, 'aplicacion/producto.html' , {'productos': productos , 'tipos_producto': tipos_producto})
 
+@csrf_exempt
 def mantenedorTipoUsuario(request):
     tipos_usuarios = TipoUsuario.objects.all() 
     return render(request, 'aplicacion/tipousuario.html', {'tipos_usuarios': tipos_usuarios})
 
+@csrf_exempt
 def mantenedorSuscripcion(request):
     usuario = Usuario.objects.all()
     suscripciones = Suscripcion.objects.all()
     return render(request, 'aplicacion/suscripcion.html', {'suscripciones': suscripciones, 'usuarios': usuario})
 
-
+@csrf_exempt
 def mantenedorPromocion(request):
     producto = Producto.objects.all()
     promociones = Promocion.objects.raw('''
@@ -146,7 +162,7 @@ def mantenedorPromocion(request):
     return render(request, 'aplicacion/promocion.html', {'productos': producto, 'promociones': promociones_dict})
 
 
-
+@csrf_exempt
 def eliminarproductocarrito(request):
     if request.method == 'POST':
         try:
@@ -169,7 +185,7 @@ def eliminarproductocarrito(request):
     else:
         return JsonResponse({'estado': 'fallido'})
 
-
+@csrf_exempt
 def carrito(request):
 
     carro = request.session.get('carro', {})
@@ -183,6 +199,7 @@ def carrito(request):
         total = sum(producto.precio for producto in productos)
         return render(request, 'aplicacion/carrito.html' , {'productos': productos , 'total': total})
 
+@csrf_exempt
 def editar_promocion(request, pk):
     promocion = get_object_or_404(Promocion, id_promocion=pk)
     if request.method == 'POST':
@@ -194,7 +211,7 @@ def editar_promocion(request, pk):
         form = PromocionForm(instance=promocion)
     return render(request, 'aplicacion/editar_promocion.html', {'form': form})
 
-
+@csrf_exempt
 def agregarSuscripcion(request):
     if request.method == 'POST':
         try:
@@ -249,6 +266,7 @@ def agregarSuscripcion(request):
 
 
 # Agregar al carro
+@csrf_exempt
 def agregaralcarro(request):
     if request.method == 'POST':
             try:
@@ -280,6 +298,7 @@ def agregaralcarro(request):
     else:
             return JsonResponse({'estado': 'fallido'})
 
+@csrf_exempt
 def eliminar_suscripcion(request, pk):
     suscripcion = get_object_or_404(Suscripcion,IdSuscripcion=pk)
     if request.method == 'POST':
@@ -287,7 +306,7 @@ def eliminar_suscripcion(request, pk):
         return redirect('../../../administrar/mantenedorSuscripcion/')
     return render(request, 'aplicacion/confirma_eliminarSuscripcion.html', {'suscripcion': suscripcion})
 
-
+@csrf_exempt
 def eliminar_promocion(request, pk):
     promocion = get_object_or_404(Promocion, id_promocion=pk)
     if request.method == 'POST':
@@ -295,7 +314,7 @@ def eliminar_promocion(request, pk):
         return redirect('../../../administrar/mantenedorPromocion/')
     return render(request, 'aplicacion/confirma_eliminarPromocion.html', {'promocion': promocion})
 
-
+@csrf_exempt
 def agregarPromocion(request):
     if request.method == 'POST':
         try:
@@ -322,7 +341,7 @@ def agregarPromocion(request):
     else:
         return JsonResponse({'estado': 'fallido'})
 
-
+@csrf_exempt
 def obtenersesion(request):
     if request.method == 'POST':
         try:
@@ -344,6 +363,7 @@ def obtenersesion(request):
         return JsonResponse({'estado': 'fallido'})
 
 #iniciar sesion
+@csrf_exempt
 def iniciarsesion(request):
     if request.method == 'POST':
             try:
@@ -372,10 +392,12 @@ def iniciarsesion(request):
 
 # INICIO VISTAS USUARIO
 
+@csrf_exempt
 def lista_usuarios(request):
     usuarios = Usuario.objects.all()
     return render(request, 'aplicacion/lista_usuarios.html', {'usuarios': usuarios})
 
+@csrf_exempt
 def editar_usuario(request, pk):
     usuario = get_object_or_404(Usuario, IdUsuario=pk)
     if request.method == 'POST':
@@ -387,6 +409,7 @@ def editar_usuario(request, pk):
         form = UsuarioForm(instance=usuario)
     return render(request, 'aplicacion/editar_usuario.html', {'form': form})
 
+@csrf_exempt
 def eliminar_usuario(request, pk):
     usuario = get_object_or_404(Usuario, IdUsuario=pk)
     if request.method == 'POST':
@@ -394,6 +417,7 @@ def eliminar_usuario(request, pk):
         return redirect('../../administrar/mantenedorUsuarios/')
     return render(request, 'aplicacion/confirma_eliminarUsuario.html', {'usuario': usuario})
 
+@csrf_exempt
 def agregarUsuario(request):
     if request.method == 'POST':
         try:
@@ -425,10 +449,12 @@ def agregarUsuario(request):
 
 
 # INICIO VISTAS TIPO USUARIO    
+@csrf_exempt
 def lista_tipos_usuario(request):
     tipos_usuarios = TipoUsuario.objects.all()
     return render(request, 'aplicacion/lista_tipos_usuario.html', {'tipos_usuarios': tipos_usuarios})
 
+@csrf_exempt
 def editar_tipo_usuario(request, pk):
     tipo_usuario = get_object_or_404(TipoUsuario, IdTipoUsuario=pk)
     if request.method == 'POST':
@@ -440,6 +466,7 @@ def editar_tipo_usuario(request, pk):
         form = TipoUsuarioForm(instance=tipo_usuario)
     return render(request, 'aplicacion/editar_tipo_usuario.html', {'form': form})
 
+@csrf_exempt
 def eliminar_tipo_usuario(request, pk):
     tipo_usuario = get_object_or_404(TipoUsuario, IdTipoUsuario=pk)
     if request.method == 'POST':
@@ -449,6 +476,7 @@ def eliminar_tipo_usuario(request, pk):
 
     
 
+@csrf_exempt
 def agregarTipoUsuario (request):
     if request.method == 'POST':
         try:
@@ -473,10 +501,12 @@ def agregarTipoUsuario (request):
 
 
 # INICIO VISTAS TIPO Producto 
+@csrf_exempt
 def lista_tipos_producto(request):
     tipos_producto = TipoProducto.objects.all()
     return render(request, 'aplicacion/lista_tipos_producto.html', {'tipos_productos': tipos_producto})
 
+@csrf_exempt
 def editar_tipo_producto(request, pk):
     tipo_producto = get_object_or_404(TipoProducto, IdTipoProducto=pk)
     if request.method == 'POST':
@@ -488,6 +518,7 @@ def editar_tipo_producto(request, pk):
         form = TipoProductoForm(instance=tipo_producto)
     return render(request, 'aplicacion/editar_tipo_producto.html', {'form': form})
 
+@csrf_exempt
 def eliminar_tipo_producto(request, pk):
     tipo_producto = get_object_or_404(TipoProducto, IdTipoProducto=pk)
     if request.method == 'POST':
@@ -496,7 +527,7 @@ def eliminar_tipo_producto(request, pk):
     return render(request, 'aplicacion/confirma_eliminarTipoProducto.html', {'tipo_producto': tipo_producto})
 
     
-
+@csrf_exempt
 def agregarTipoProducto (request):
     if request.method == 'POST':
         try:
@@ -518,7 +549,7 @@ def agregarTipoProducto (request):
 
 
 # INICIO VISTAS PRODUCTO
-
+@csrf_exempt
 def GrabarProducto(request):
     if request.method == 'POST':
         try:
@@ -550,6 +581,7 @@ def GrabarProducto(request):
     else:
         return JsonResponse({'estado': 'fallido'})
 
+@csrf_exempt
 def BuscarProductoEditar(request):
     if request.method == 'POST':
         try:
@@ -576,10 +608,12 @@ def BuscarProductoEditar(request):
     else:
         return JsonResponse({'estado': 'fallido'})
 
+@csrf_exempt
 def lista_producto(request):
     tipos_producto = Producto.objects.all()
     return render(request, 'aplicacion/lista_producto.html', {'tipos_productos': tipos_producto})
 
+@csrf_exempt
 def editar_producto(request, pk):
     producto = get_object_or_404(Producto, IdProducto=pk)
     tipos_productos = TipoProducto.objects.all() 
@@ -587,7 +621,7 @@ def editar_producto(request, pk):
 
 
 
-
+@csrf_exempt
 def ConfirmarEditarProducto(request):
     if request.method == 'POST':
         try:
@@ -628,6 +662,7 @@ def ConfirmarEditarProducto(request):
     else:
         return JsonResponse({'estado': 'fallido'}) 
 
+@csrf_exempt
 def eliminar_producto(request, pk):
     producto = get_object_or_404(Producto, IdProducto=pk)
     if request.method == 'POST':

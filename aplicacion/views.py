@@ -15,16 +15,17 @@ import os
         
 @csrf_exempt
 def cerrarsesion(request):
-    if request.method == 'POST':
+    
+    if request.method == 'POST': #esta linea consulta el tipo de llamada(post,get, etc) post graba datos
         try:
-            if 'tipousuario' in request.session:
-                del request.session['tipousuario']
+            if 'tipousuario' in request.session: #
+                del request.session['tipousuario'] #esto pregunta si hay tipo usuario en la sesion
             if 'idUsuario' in request.session:
                 del request.session['idUsuario']
             if 'carro' in request.session:
                 del request.session['carro']
             return JsonResponse({'estado': 'completado'})
-        except Exception as e:
+        except Exception as e: #si hay algo malo esto tirara error.
             return JsonResponse({
                 'Excepciones': {
                     'message': str(e),  # Mensaje de la excepción
@@ -158,6 +159,32 @@ def index(request):
 def enviarcontacto(request):
     return render(request, 'aplicacion/index.html')
 
+
+
+@csrf_exempt
+def RegistrarseFormulario(request):
+    if request.method == 'POST':
+        try:
+            nombre = request.POST.get('nombre')
+            email = request.POST.get('email')
+            contrasena = request.POST.get('contrasena')
+
+            tipo_usuario = TipoUsuario.objects.get(IdTipoUsuario=3)
+            usuario = Usuario(nombre=nombre, email=email, password=contrasena, tipo_usuario=tipo_usuario)
+            usuario.save()
+            return JsonResponse({'estado': 'completado'})
+        except Exception as e:
+            return JsonResponse({
+                'Excepciones': {
+                    'message': str(e),  # Mensaje de la excepción
+                    'type': type(e).__name,  # Tipo de la excepción
+                    'details': traceback.format_exc()  # Detalles de la excepción
+                }
+            })
+    else:
+        return JsonResponse({'estado': 'fallido'})
+
+
 @csrf_exempt
 def maceteros(request):
     productos = Producto.objects.raw('''
@@ -165,10 +192,10 @@ def maceteros(request):
                 FROM aplicacion_producto p
                 LEFT JOIN aplicacion_promocion pr ON p.IdProducto = pr.id_producto_id
                 WHERE tipo_producto_id = %s ''' , [9])
-    productos_dict = []
+    productos_dict = [] #diccionario de productos
     for producto in productos:
                 producto_dict = model_to_dict(producto)
-                producto_dict['id_promocion'] = producto.promocion_id if producto.promocion_id else None
+                producto_dict['id_promocion'] = producto.promocion_id if producto.promocion_id else None #si no existe el promocion es null
                 producto_dict['descuento'] = producto.descuento if producto.descuento else 0
                 producto_dict['precio_descuento'] = producto.precio - (producto.precio * producto_dict['descuento'] / 100)
                 productos_dict.append(producto_dict)

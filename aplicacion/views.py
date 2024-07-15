@@ -86,15 +86,18 @@ def suscribirse(request):
 def recuperardatosusuario(request):
     if request.method == 'POST':
         try:
-            id_usuario = request.session['idUsuario']
-            usuario = Usuario.objects.get(IdUsuario=id_usuario)
-            usuario_dict = model_to_dict(usuario)
+            if 'idUsuario' in request.session:
+                id_usuario = request.session['idUsuario']
+                usuario = Usuario.objects.get(IdUsuario=id_usuario)
+                usuario_dict = model_to_dict(usuario)
 
-            suscrito = Suscripcion.objects.filter(usuario_id=id_usuario).exists()
-            if suscrito:
-                return JsonResponse({'estado': 'completado', 'usuario': usuario_dict , 'suscrito': True})
+                suscrito = Suscripcion.objects.filter(usuario_id=id_usuario).exists()
+                if suscrito:
+                    return JsonResponse({'estado': 'completado', 'usuario': usuario_dict , 'suscrito': True})
+                else:
+                    return JsonResponse({'estado': 'completado', 'usuario': usuario_dict , 'suscrito': False})
             else:
-                return JsonResponse({'estado': 'completado', 'usuario': usuario_dict , 'suscrito': False})
+                return JsonResponse({'estado': 'completado', 'error': 'No hay una sesión activa.'})
         except Exception as e:
             return JsonResponse({
                 'Excepciones': {

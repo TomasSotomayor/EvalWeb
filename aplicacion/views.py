@@ -9,6 +9,7 @@ from uuid import uuid4
 from datetime import datetime, timedelta
 from .forms import TipoUsuarioForm,TipoProductoForm,UsuarioForm,PromocionForm
 from django.views.decorators.csrf import csrf_exempt
+import json
 
 import os
         
@@ -35,6 +36,80 @@ def cerrarsesion(request):
 @csrf_exempt
 def administrar(request):
     return render(request, 'aplicacion/admin.html')   
+
+
+
+
+
+@csrf_exempt
+def desuscribirse(request):
+    if request.method == 'POST':
+        try:
+            id_usuario = request.session['idUsuario']
+            suscripcion = Suscripcion.objects.filter(usuario_id=id_usuario).all()
+            if suscripcion:
+                suscripcion.delete()
+                return JsonResponse({'estado': 'completado'})
+            else:
+                return JsonResponse({'estado': 'fallido', 'error': 'No hay suscripción activa para este usuario.'})
+        except Exception as e:
+            return JsonResponse({
+                'Excepciones': {
+                    'message': str(e),  # Mensaje de la excepción
+                    'type': type(e).__name,  # Tipo de la excepción
+                    'details': traceback.format_exc()  # Detalles de la excepción
+                    }
+            })
+    else:
+        return JsonResponse({'estado': 'fallido'})
+
+@csrf_exempt
+def suscribirse(request):
+    if request.method == 'POST':
+        try:
+            id_usuario = request.session['idUsuario']
+            fecha_actual = datetime.now()
+            fecha_fin = fecha_actual + timedelta(days=30)
+            suscripcion = Suscripcion(usuario_id=id_usuario, fecha_inicio=fecha_actual, fecha_fin=fecha_fin)
+            suscripcion.save()
+            return JsonResponse({'estado': 'completado'})
+        except Exception as e:
+            return JsonResponse({
+                'Excepciones': {
+                    'message': str(e),  # Mensaje de la excepción
+                    'type': type(e).__name,  # Tipo de la excepción
+                    'details': traceback.format_exc()  # Detalles de la excepción
+                    }
+            })
+
+@csrf_exempt
+def recuperardatosusuario(request):
+    if request.method == 'POST':
+        try:
+            id_usuario = request.session['idUsuario']
+            usuario = Usuario.objects.get(IdUsuario=id_usuario)
+            usuario_dict = model_to_dict(usuario)
+
+            suscrito = Suscripcion.objects.filter(usuario_id=id_usuario).exists()
+            if suscrito:
+                return JsonResponse({'estado': 'completado', 'usuario': usuario_dict , 'suscrito': True})
+            else:
+                return JsonResponse({'estado': 'completado', 'usuario': usuario_dict , 'suscrito': False})
+        except Exception as e:
+            return JsonResponse({
+                'Excepciones': {
+                    'message': str(e),  # Mensaje de la excepción
+                    'type': type(e).__name,  # Tipo de la excepción
+                    'details': traceback.format_exc()  # Detalles de la excepción
+                    }
+            })
+    else:
+        return JsonResponse({'estado': 'fallido'})
+
+@csrf_exempt
+def miperfil(request):
+    return render(request, 'aplicacion/infocuenta.html')
+
 
 @csrf_exempt
 def arbustos(request):
@@ -187,17 +262,36 @@ def eliminarproductocarrito(request):
 
 @csrf_exempt
 def carrito(request):
-
     carro = request.session.get('carro', {})
     if carro == {} or carro['productos'] == {}:
-        return render(request, 'aplicacion/carrito.html' , {'productos': [], 'total': 0})
+        return render(request, 'aplicacion/carrito.html', {'productos': [], 'total': 0})
     else:
-        productos = []
-        for idProducto in carro['productos']:
-            producto = Producto.objects.get(IdProducto=idProducto)
-            productos.append(producto)
-        total = sum(producto.precio for producto in productos)
-        return render(request, 'aplicacion/carrito.html' , {'productos': productos , 'total': total})
+        # Initialize an empty list to hold products with discounts
+        productos_con_descuento = []
+
+        # Query for products and promotions as before
+        productos = Producto.objects.filter(IdProducto__in=carro['productos'].keys())
+        promociones = Promocion.objects.filter(id_producto_id__in=carro['productos'].keys())
+
+        for producto in productos:
+            descuentoPromocion = 0
+            # Check if there is a promotion for the current product
+            promocion_filtrada = promociones.filter(id_producto_id=producto.IdProducto)
+            if promocion_filtrada:
+                descuentoPromocion = promocion_filtrada[0].descuento
+            # Create a dictionary for the product and its discount
+            producto_con_descuento = {
+                'producto': producto,
+                'descuentoPromocion': descuentoPromocion
+            }
+            # Append the dictionary to the list
+            productos_con_descuento.append(producto_con_descuento)
+
+        # Calculate the total considering the discounts
+        total = sum(p['producto'].precio - p['descuentoPromocion'] for p in productos_con_descuento)
+
+        # Render the template with the modified list of products
+    return render(request, 'aplicacion/carrito.html', {'productos': productos_con_descuento, 'total': total})
 
 @csrf_exempt
 def editar_promocion(request, pk):
@@ -262,6 +356,52 @@ def agregarSuscripcion(request):
     else:
         return JsonResponse({'estado': 'fallido'})
     
+
+
+
+
+@csrf_exempt
+def comprarproductos(request):
+    if request.method == 'POST':
+        try:
+            id_usuario = request.session['idUsuario']
+            fecha_actual = datetime.now()
+            productos_json = request.POST.get('Productos')
+            productos = json.loads(productos_json)
+
+            for producto in productos:
+                id_producto = producto['id_producto']
+                cantidad = producto['cantidad']
+                precio = producto['precio']
+                productoValidar = Producto.objects.get(IdProducto=id_producto)
+                if productoValidar.stock < int(cantidad):
+                    producto_nombre = Producto.objects.get(id_producto=id_producto).nombre
+                    return JsonResponse({'estado': 'fallido', 'error': 'No hay suficiente stock de '+ producto_nombre +'.'})
+
+            compra = Compra(usuario_id=id_usuario, fecha_compra=fecha_actual)
+            compra.save()
+
+            max_id_compra = Compra.objects.raw('SELECT IdCompra, MAX(IdCompra) as id_compra FROM aplicacion_compra WHERE usuario_id = %s GROUP BY IdCompra ORDER BY IdCompra DESC LIMIT 1', [id_usuario])
+            for producto in productos:
+                id_producto = producto['id_producto']
+                cantidad = producto['cantidad']
+                precio = producto['precio']
+                Producto.objects.filter(IdProducto=int(id_producto)).update(stock=Producto.objects.get(IdProducto=int(id_producto)).stock - int(cantidad))
+                detalle_compra = DetalleCompra(compra_id=max_id_compra[0].id_compra, producto_id=id_producto, cantidad=cantidad, precio_unitario=precio)        
+                detalle_compra.save()
+            del request.session['carro']
+            return JsonResponse({'estado': 'completado'})
+            
+        except Exception as e:
+            return JsonResponse({
+                'Excepciones': {
+                    'message': str(e),  # Mensaje de la excepción
+                    'type': type(e).__name__,  # Tipo de la excepción
+                    'details': traceback.format_exc()  # Detalles de la excepción
+                }
+            })
+    else:
+        return JsonResponse({'estado': 'fallido'})
 
 
 

@@ -73,7 +73,7 @@
     <script>
         $(document).ready(function() {
             obtenerSesion();
-
+            recuperarDatosUsuario();
             actualizarPrecio();
         });
     </script>
@@ -103,6 +103,7 @@
                         <th>Imagen</th>
                         <th>Nombre del producto</th>
                         <th>Precio</th>
+                        <th>Descuento %</th>
                         <th>Cantidad</th>
                         <th>Stock</th>
                         <th>Eliminar</th>
@@ -112,11 +113,12 @@
                     {% for producto in productos %}
 
                     <tr>
-                        <td><img src="{% static 'img/imagenesProducto/' %}{{ producto.imagen }}" alt="{{ producto.nombre }}" class="product-img"></td>     
-                        <td class="idProducto" value="{{ producto.IdProducto }}">{{ producto.nombre }}</td>
-                        <td class="precioProducto">{{ producto.precio }}</td>
+                        <td><img src="{% static 'img/imagenesProducto/' %}{{ producto.producto.imagen }}" alt="{{ producto.nombre }}" class="product-img"></td>     
+                        <td class="idProducto" data-idproducto="{{ producto.producto.IdProducto }}">{{ producto.producto.nombre }}</td>
+                        <td class="precioProducto">{{ producto.producto.precio }}</td>
+                        <td class="descuentoProducto">{{ producto.descuentoPromocion }}</td>
                         <td><input onblur="actualizarPrecio();" class="cantidadProducto" type="number" value="1" min="1" max="{{ producto.stock }}"></td>
-                        <td>{{ producto.stock }}</td>
+                        <td class="stockProducto">{{ producto.producto.stock }}</td>
                         <td>
                             <button type="button" class="btn btn-primary" onclick="EliminarProductoCarrito(this)">Eliminar</button>
                         </td>
@@ -126,6 +128,8 @@
                     
                 </tbody>
             </table>
+            <h1 id="descuento"></h1>
+            <h1 id="suscrito"></h1>
             <h1 id="textototal"></h1>
             <button type="button" class="btn btn-primary" onclick="comprarProductos();">Proceder al Pago</button>
         </div>

@@ -51,10 +51,10 @@ $(document).ready(function(){
 });
 
 var GL_SESION_VALIDA = 0;
-
+var GL_SUSCRITO = 0;
 
 function EliminarProductoCarrito(Obj){
-    var idProducto = $(Obj).parent().parent().find('.idProducto').attr('value');
+    var idProducto = $(Obj).parent().parent().find('.idProducto').data('idproducto');
     var fd = new FormData();
     fd.append("idproducto", idProducto);
     $(Obj).parent().parent().remove();
@@ -92,14 +92,95 @@ function EliminarProductoCarrito(Obj){
     });
 }
 
+
+
+function comprarProductos(){
+    console.log('entre comprar');
+    var msg = '';
+    var fd = new FormData();
+    var total = 0;
+    var arrayProductos = [];
+    $("#tablaProductos tbody tr").each(function() {
+            if ($(this).find('.cantidadProducto').val() <= 0) {
+                msg = msg + '\nPor favor, introduzca una cantidad valida para el producto '+ $(this).find('.idProducto').text() +'.';
+            }
+            else if (parseInt($(this).find('.cantidadProducto').val()) > parseInt($(this).find('.stockProducto').text())) {
+                msg = msg + '\nLa cantidad del producto '+ $(this).find('.idProducto').text() +' no puede ser mayor al stock.';
+            }
+        
+            var descuento = parseInt($(this).find('.descuentoProducto').text());
+            var id_producto = $(this).find('.idProducto').data('idproducto');
+            var cantidad = $(this).find('.cantidadProducto').val();
+            var precio = $(this).find('.precioProducto').text();   
+            console.log('id_producto: '+id_producto);
+            console.log('cantidad: '+cantidad);
+            console.log('precio: '+precio);    
+            precio = parseInt(precio) * (100 - descuento) * parseInt(cantidad) / 100; 
+            arrayProductos.push({id_producto: id_producto, cantidad: cantidad, precio: precio});
+            
+    });
+    console.log(arrayProductos);
+    console.log(JSON.stringify(arrayProductos));
+    fd.append('Productos', JSON.stringify(arrayProductos));
+    if (msg != '') {
+        alert(msg);
+        return;
+    }
+
+
+
+    $.ajax({
+        type: "POST",
+        url: "/comprarproductos/",
+        data: fd,
+        contentType: false,
+        processData: false,
+        headers: { "X-CSRFToken": getCookie("csrftoken") },
+        success: function (response) {
+            console.log(response);
+            if (response.Excepciones != null) {
+                alert('Ha ocurrido un error inesperado');
+                console.log(response.Excepciones.message + '\n' + response.Excepciones.type + '\n' + response.Excepciones.details);
+                return;
+            }
+            if (response.error != null) {
+                alert(response.error);
+                return;
+            }
+            if(response.estado === 'completado') {
+                alert('Compra realizada con éxito');
+                window.location.href = '/carrito/';
+            } else {
+                alert('Falló la compra');
+            }
+        },
+        error: function (XMLHttpRequest, text, error) { ; alert(XMLHttpRequest.responseText); },
+        failure: function (response) { alert(response); }
+    });
+}
+
+
 function actualizarPrecio(){
     var total = 0;
-
+    var descontado = 0;
    $('.precioProducto').each(function() {
         var precio = parseInt($(this).text());
+        var descuento = parseInt($(this).parent().find('.descuentoProducto').text());
         var cantidad = parseInt($(this).parent().find('.cantidadProducto').val());
-        total = total + (precio * cantidad);
+        descontado = descontado + (precio * cantidad * descuento / 100);
+        total = total + (precio * ( 100 - descuento) / 100 * cantidad);
     });
+    $('#descuento').text("Descuento: $"+descontado);
+    if (GL_SUSCRITO == 1) { 
+        descontado = descontado + total * 0.1;
+        total = total * 0.9;
+        $('#suscrito').text("Suscrito: Si");
+    }
+    else {
+        $('#suscrito').text("Suscrito: No ");
+
+    }
+    $('#descuento').text("Descuento: $"+descontado);
     $('#textototal').text("Total: $"+total);
 
 }
@@ -250,6 +331,7 @@ var navbarInferior = `
                                     </div>
                                     <button type="button" onclick="iniciarsesion();" class="btn btn-primary">Iniciar Sesión</button>
                                     <button type="button" onclick="UsuarioAdmin();" class="btn btn-primary">Usuario Admin</button>
+                                    <button type="button" onclick="UsuarioCliente();" class="btn btn-primary">Usuario Cliente</button>
                                 </div>
                                 </form>
                             </div>
@@ -289,6 +371,113 @@ var navbarInferior = `
     }
 
     
+}
+
+
+function recuperarDatosUsuario(){
+    $.ajax({
+        type: "POST",
+        url: "/recuperardatosusuario/",
+        contentType: false,
+        processData: false,
+        headers: { "X-CSRFToken": getCookie("csrftoken") },
+        success: function (response) {
+            console.log(response);
+            if (response.Excepciones != null) {
+                alert('Ha ocurrido un error inesperado');
+                console.log(response.Excepciones.message + '\n' + response.Excepciones.type + '\n' + response.Excepciones.details);
+                return;
+            }
+            if (response.error != null) {
+                alert(response.error);
+                return;
+            }
+            if(response.estado === 'completado') { 
+                var nombre = response.usuario.nombre.split(' ')[0];
+                var apellido = response.usuario.nombre.split(' ')[1] ? response.usuario.nombre.split(' ')[1] : '';
+                $('#nombre').val(nombre);
+                $('#apellido').val(apellido);
+                $('#email').val(response.usuario.email);
+                if (response.suscrito == true) {
+                    $('#botonSuscripcion').text('Desuscribirse');
+                    $('#botonSuscripcion').attr('onclick', 'desuscribirse();');
+                    GL_SUSCRITO = 1;
+                    actualizarPrecio();
+                }
+                if (response.suscrito == false) {
+                    $('#botonSuscripcion').text('Suscribirse por 10$');
+                    $('#botonSuscripcion').attr('onclick', 'suscribirse();');
+                    GL_SUSCRITO = 0;
+                }
+            } else {
+                alert('Falló la recuperación de datos');
+            }
+        },
+        error: function (XMLHttpRequest, text, error) { ; alert(XMLHttpRequest.responseText); },
+        failure: function (response) { alert(response); }
+    });
+}
+
+
+function desuscribirse(){
+    $.ajax({
+        type: "POST",
+        url: "/desuscribirse/", 
+        contentType: false, 
+        processData: false,
+        headers: { "X-CSRFToken": getCookie("csrftoken") },
+        success: function (response) {
+            console.log(response);
+            if (response.Excepciones != null) {
+                alert('Ha ocurrido un error inesperado');
+                console.log(response.Excepciones.message + '\n' + response.Excepciones.type + '\n' + response.Excepciones.details);
+                return;
+            }
+            if (response.error != null) {
+                alert(response.error);
+                return;
+            }
+            if(response.estado === 'completado') {
+                alert('Desuscripción realizada con éxito');
+                window.location.href = '/miperfil/';
+            } else {
+                alert('Falló la desuscripción');
+            }
+        },
+        error: function (XMLHttpRequest, text, error) { ; alert(XMLHttpRequest.responseText); },
+        failure: function (response) { alert(response); }
+    });
+}
+
+
+function suscribirse(){
+    $.ajax({
+        type: "POST",
+        url: "/suscribirse/",
+        contentType: false,
+        processData: false,
+        headers: { "X-CSRFToken": getCookie("csrftoken") },
+        success: function (response) {
+            console.log(response);
+            if (response.Excepciones != null) {
+                alert('Ha ocurrido un error inesperado');
+                console.log(response.Excepciones.message + '\n' + response.Excepciones.type + '\n' + response.Excepciones.details);
+                return;
+            }
+            if (response.error != null) {
+                alert(response.error);
+                return;
+            }
+            if(response.estado === 'completado') {
+                alert('Suscripción realizada con éxito');
+                window.location.href = '/miperfil/';
+            } else {
+                alert('Falló la suscripción');
+            }
+        },
+        error: function (XMLHttpRequest, text, error) { ; alert(XMLHttpRequest.responseText); },
+        failure: function (response) { alert(response); }
+    });
 }
 
 function obtenerSesion(){
@@ -871,4 +1060,11 @@ function cerrarSesion(){
         error: function (XMLHttpRequest, text, error) { ; alert(XMLHttpRequest.responseText); },
         failure: function (response) { alert(response); }
     });
+}
+
+
+function UsuarioCliente(){
+    $('#username').val('cliente@cliente.cl');
+    $('#password').val('1234');
+    iniciarsesion();
 }
